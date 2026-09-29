@@ -1,6 +1,6 @@
 # Ideograms
 
-Interactive R- and G-banded ideograms of all 24 human chromosomes at the ISCN 400, 550 and 850-band levels, with landmark genes, plus a simulator that shows how the same chromosomes look in a real RHG metaphase. Two self-contained HTML files, with no build step and no dependencies.
+Interactive R- and G-banded idiograms of all 24 human chromosomes at the 400, 550 and ~700-band levels, with landmark genes; a simulator that shows how the same chromosomes look in a real RHG metaphase; and a builder for structural and numerical abnormalities that writes ISCN 2024 nomenclature. Three self-contained HTML pages, no dependencies.
 
 ## Use
 
@@ -8,7 +8,7 @@ Open `index.html` in any browser. It works offline; without internet it falls ba
 
 ### Ideogram reference (`index.html`)
 
-- **Karyogram:** all chromosomes in A–G groups, aligned on the centromere and drawn to one shared scale. Switch between 400, 550 and 850 bands. Click a chromosome to open it.
+- **Karyogram:** all chromosomes in A–G groups, aligned on the centromere and drawn to one shared scale. Switch between 400, 550 and ~700 bands. Click a chromosome to open it.
 - **Detail view:** the selected chromosome at all three band levels side by side. Hover or tap a band to outline the same genomic interval at the other levels. The side panel shows the band's R- and G-banding appearance, its GRCh38 interval, its size and any landmark genes inside it.
 - **R/G switch:** flips every view between R-banding (RHG) and G-banding (GTG).
 - **Landmark genes:** 2 to 6 per chromosome, 74 in total. Hover a gene name for its band and a short note.
@@ -17,13 +17,21 @@ Open `index.html` in any browser. It works offline; without internet it falls ba
 
 ### Microscope simulator (`simulator.html`)
 
-A synthetic brightfield image of R-banded (RHG) chromosomes, built from the same 850-band data. It is a model of what you would see, not a photograph.
+A synthetic brightfield image of R-banded (RHG) chromosomes, built from the same GRCh38 (~700-band) data. It is a model of what you would see, not a photograph.
 
 - **One chromosome:** a homologue pair of any chromosome, with an optional ideogram beside it. Small chromosomes are enlarged to fill the field, and the caption gives the magnification relative to chromosome 1.
 - **Karyogram:** all chromosomes in rows, aligned on the centromere at one shared scale, as 46,XX or 46,XY.
-- **Controls:** condensation (about 300 to 850 bands; sub-bands merge as it drops), focus, staining, chromatid separation, bending, Giemsa colour or camera grayscale, and the tone of heterochromatin.
+- **Controls:** condensation (about 300 to 700 bands; sub-bands merge as it drops), focus, staining, chromatid separation, bending, Giemsa colour or camera grayscale, and the tone of heterochromatin.
 - **New spread:** draws different homologues. Heterochromatin blocks and acrocentric stalks vary in size between homologues, as they do in people.
 - **Deep links:** `simulator.html#chr1` through `#chrY`, or `simulator.html#karyogram`.
+
+### Abnormality builder (`abnormalities.html`)
+
+- **Type a karyotype** in the ISCN short system, e.g. `46,XY,t(9;22)(q34;q11.2)`, or pick one of the examples (CML, APL, inv(16), del(5q), i(17q), trisomy 21, Turner, a ring, an unbalanced der(22), and others).
+- **Or build it by hand.** Choose the abnormality (translocation, unbalanced der, deletion, duplication, inversion, isochromosome, ring, unknown material, extra or missing copy) and the chromosome(s), then click the bands where the breaks are. Drag an orange breakpoint marker up or down: the band name, the resulting chromosome and the ISCN string update as it moves, so you can find the right cut by eye.
+- **Output:** the karyotype in the short system, each derivative in the detailed system (e.g. `der(9) 9pter→9q34::22q11.2→22qter`), and the landmark genes lying in the breakpoint bands.
+- **Views:** normal and abnormal homologues side by side as idiograms (a coloured strip shows which chromosome each segment comes from) or as a simulated microscope image.
+- **Scope:** t, der(…)t, del, dup, inv, i, r, add, and gains/losses. Not supported: insertions, dicentrics, markers, three-way translocations, inverted duplications, mosaics and clone counts.
 
 ### Publish with GitHub Pages
 
@@ -33,7 +41,7 @@ This repo is public, so GitHub Pages can serve the page. Go to Settings → Page
 
 | Path | What it is |
 |---|---|
-| `index.html`, `simulator.html` | The website pages. **Generated — do not edit by hand.** |
+| `index.html`, `simulator.html`, `abnormalities.html` | The website pages. **Generated — do not edit by hand.** |
 | `src/*.template.html` | The page sources: layout, styles and code, with placeholders where the data goes. Edit these. |
 | `data/bands.json`, `data/landmark-genes.json` | The band and gene data. Edit these to change what the pages show. |
 | `build.py` | Puts templates and data together into the pages. |
@@ -51,8 +59,8 @@ Each page stays a single self-contained file, so it works offline and on GitHub 
 
 | File | Contents | Source |
 |---|---|---|
-| `data/bands.json` | Every band at 400, 550 and 850 levels: `[band, iscn_start, iscn_stop, bp_start, bp_stop, ncbi_stain]` | NCBI human ideogram data, GRCh38, as packaged in [ideogram.js](https://github.com/eweitz/ideogram) 1.53.0 |
-| `data/landmark-genes.json` | Symbol, GRCh38 start/end, cytoband span, short note | Ensembl release 110 GRCh38 gene coordinates (via the ideogram.js gene cache); bands assigned from the 850-level table |
+| `data/bands.json` | Every band at 400, 550 and GRCh38 (~700, stored under the key `850`) levels: `[band, iscn_start, iscn_stop, bp_start, bp_stop, ncbi_stain]` | NCBI human ideogram data, GRCh38, as packaged in [ideogram.js](https://github.com/eweitz/ideogram) 1.53.0 |
+| `data/landmark-genes.json` | Symbol, GRCh38 start/end, cytoband span, short note | Ensembl release 110 GRCh38 gene coordinates (via the ideogram.js gene cache); bands assigned from the GRCh38 table |
 
 `index.html` embeds the same data, so it does not load these files. They are here so the data can be checked and reused on its own.
 
@@ -78,7 +86,9 @@ Each page stays a single self-contained file, so it works offline and on GitHub 
 - **Heterochromatin is not inverted.** Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are drawn with a hatch instead of a guessed tone, because their appearance varies between individuals and preparations.
 - **550-level proportions are approximate** in the seven rescaled regions listed above.
 - **Detail views are not to scale with each other.** Each chromosome is drawn tall enough to fit its labels; only the karyogram uses a shared scale.
-- **Two ISCN levels are missing.** ISCN also defines 300- and 700-band levels, but they are not in the source data.
+- **The finest level is GRCh38, not ISCN 850.** ISCN 2024 (section 2.4) says the GRCh38 idiograms best fit the ISCN 700-band level. GRCh38 is more detailed than ISCN at 6p24 and 9q34.1; ISCN 850 is more detailed at 1q32, 2p21, 5q13.2, 6p22.3 and 6q21. NCBI's file calls this set 850, which is why earlier versions of the site did too. The data key is still `850` for compatibility.
+- **GRCh38 sub-band names are not karyotype names.** Names such as 9q34.12 exist only in GRCh38; an ISCN karyotype uses the level actually resolved, e.g. `t(9;22)(q34;q11.2)`.
+- **Two ISCN levels are missing.** ISCN also defines 300- and 850-band idiograms, but they are not in the source data.
 - **Gene positions are for orientation.** They are placed by interpolation within their band. Gene extents follow Ensembl's annotation, which is sometimes longer than the canonical transcript (for example CFTR shows as 7q31.2–q31.31). IGH is marked at IGHM, inside the IGH locus.
 
 ## Landmark genes

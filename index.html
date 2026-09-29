@@ -91,6 +91,7 @@ input[type=range]{accent-color:var(--turq)}
 .notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;max-width:92ch;font-size:14px;color:var(--fg)}
 .notes li::marker{color:var(--turq)}
 
+@media (max-width:560px){.tabs svg{display:none}.tabs a{padding:6px 9px}}
 /* ---- page ---- */
 .kg{padding:14px 16px 10px;display:flex;flex-direction:column;gap:8px}
 .kg-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
@@ -165,13 +166,14 @@ svg text{font-family:var(--f-mono)}
     <div class="tabs">
       <a href="index.html" aria-current="page"><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
       <a href="simulator.html" ><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
+      <a href="abnormalities.html"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
     </div>
   </div>
 </nav>
 <div class="wrap">
   <header>
     <div class="eyebrow" id="eyebrow">ISCN ideograms · RHG pattern · GRCh38</div>
-    <h1>Human chromosomes in <span id="h1mode">R&#8209;banding</span> at 400, 550 and 850 bands</h1>
+    <h1>Human chromosomes in <span id="h1mode">R&#8209;banding</span> at 400, 550 and ~700 bands</h1>
     <p>R-banding by heat denaturation reverses the G-band pattern: G-pale bands stain dark and G-dark bands stain pale. Band names are the same in both methods. Use the switch to flip every view between R- and G-banding. Pick a chromosome in the karyogram, then hover or tap a band to see the same region at the other resolutions.</p>
     <div class="hero-actions"><a class="btn-scope" href="simulator.html#karyogram"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span>Open the microscope simulator</span></a><span class="hint">See how these chromosomes look on a real RHG slide.</span></div>
   </header>
@@ -183,7 +185,7 @@ svg text{font-family:var(--f-mono)}
         <span class="ctl-label">Level</span>
         <button class="chip kgl" id="kg400" data-lv="400" aria-pressed="true">400</button>
         <button class="chip kgl" id="kg550" data-lv="550" aria-pressed="false">550</button>
-        <button class="chip kgl" id="kg850" data-lv="850" aria-pressed="false">850</button>
+        <button class="chip kgl" id="kg850" data-lv="850" aria-pressed="false" title="GRCh38 idiogram, closest to the ISCN 700-band level">~700</button>
       </div>
     </div>
     <div class="kg-scroll"><div class="kg-rows" id="kg"></div></div>
@@ -201,7 +203,7 @@ svg text{font-family:var(--f-mono)}
       <span class="ctl-label">Levels shown</span>
       <button class="chip lvc" id="lv400" data-lv="400" aria-pressed="true">400</button>
       <button class="chip lvc" id="lv550" data-lv="550" aria-pressed="true">550</button>
-      <button class="chip lvc" id="lv850" data-lv="850" aria-pressed="true">850</button>
+      <button class="chip lvc" id="lv850" data-lv="850" aria-pressed="true" title="GRCh38 idiogram, closest to the ISCN 700-band level">~700</button>
     </div>
     <label class="toggle" id="genesToggle"><input type="checkbox" id="showGenes" checked><span>Landmark genes</span></label>
   </div>
@@ -223,10 +225,12 @@ svg text{font-family:var(--f-mono)}
     <ul>
       <li>Band names, ISCN lengths and G-stain grades come from NCBI's human ideogram data (GRCh38), as packaged in <a href="https://github.com/eweitz/ideogram" target="_blank" rel="noopener">ideogram.js</a>. The R pattern is the reciprocal of that G pattern, which is how ISCN treats R-banded ideograms.</li>
       <li>Grey steps for intermediate bands are an inversion of NCBI's G-stain grades, not measured RHG intensities. Every G-negative band has the same value in the source, so differences in intensity between R-positive bands (including the strongly staining T-bands) are not shown.</li>
-      <li>Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are not inverted. Their appearance in RHG varies between individuals and preparations, so they are drawn with a separate hatch rather than a guessed tone.</li>
+      <li>Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are not inverted. ISCN 2024 (section 2.2.2) describes these regions as variable in size and staining intensity with Q-, G-, R-, C- and T-banding, so they are drawn with a separate hatch rather than a guessed tone.</li>
       <li>At the 550 level the source file leaves gaps in seven places: 7q11.2, 8q11.2, 11p11.1, 12q24.3, 18p11.3, Xp11.2 and Yq11.2. The sub-bands in each were stretched to fill their parent 400-level band, so their relative sizes there are approximate.</li>
       <li>In the karyogram, all chromosomes share one scale in ISCN units. In the detail view each chromosome is drawn to a height that leaves room for its labels, so detail views are not to scale with each other.</li>
-      <li>ISCN also defines 300- and 700-band levels. They are not in this dataset, so they are not drawn. Landmark genes (2 to 6 per chromosome, 74 in all) use Ensembl release 110 GRCh38 gene coordinates, placed by interpolation within their band. They are orientation marks, not precise positions. The IGH mark sits at IGHM, inside the IGH locus.</li>
+      <li><b>The finest level is the GRCh38 idiogram, labelled ~700.</b> ISCN 2024 (section 2.4) states that the GRCh38 idiograms best fit the ISCN 700-band level. GRCh38 is more detailed than ISCN at 6p24 and 9q34.1, and ISCN 850 is more detailed at 1q32, 2p21, 5q13.2, 6p22.3 and 6q21. It was labelled 850 in earlier versions of this page, following NCBI's file names.</li>
+      <li><b>Band names in karyotypes.</b> Sub-bands such as 9q34.12 or 6p24.3 exist only in GRCh38. An ISCN karyotype uses the band level actually resolved, e.g. t(9;22)(q34;q11.2). Gene positions on this page use GRCh38 names.</li>
+      <li>ISCN also defines 300- and 850-band idiograms. They are not in this dataset, so they are not drawn. Landmark genes (2 to 6 per chromosome, 74 in all) use Ensembl release 110 GRCh38 gene coordinates, placed by interpolation within their band. They are orientation marks, not precise positions. The IGH mark sits at IGHM, inside the IGH locus.</li>
     </ul>
   </section>
 </div>
@@ -242,6 +246,7 @@ const GROUPS = [
 ];
 const GENES = {"1":[{"n":"MUTYH","bp":45329163,"end":45340893,"band":"1p34.1","note":"MUTYH-associated polyposis"},{"n":"NRAS","bp":114704469,"end":114716771,"band":"1p13.2","note":"RAS oncogene"},{"n":"CKS1B","bp":154974653,"end":154979251,"band":"1q21.3","note":"1q21 gain in myeloma"}],"2":[{"n":"MYCN","bp":15940550,"end":15947007,"band":"2p24.3","note":"Amplified in neuroblastoma"},{"n":"ALK","bp":29192774,"end":29921586,"band":"2p23.2–p23.1","note":"ALK fusions (ALCL, lung)"},{"n":"MSH2","bp":47403067,"end":47663146,"band":"2p21–p16.3","note":"Lynch syndrome"}],"3":[{"n":"VHL","bp":10141778,"end":10153667,"band":"3p25.3","note":"Von Hippel–Lindau"},{"n":"MLH1","bp":36993226,"end":37050896,"band":"3p22.2","note":"Lynch syndrome"},{"n":"MECOM","bp":169083499,"end":169663775,"band":"3q26.2","note":"inv(3)/t(3;3) AML"}],"4":[{"n":"FGFR3","bp":1793293,"end":1808872,"band":"4p16.3","note":"Achondroplasia; t(4;14) myeloma"},{"n":"KIT","bp":54657267,"end":54740783,"band":"4q12","note":"GIST, mastocytosis"},{"n":"TET2","bp":105145875,"end":105279816,"band":"4q24","note":"Myeloid neoplasms"}],"5":[{"n":"APC","bp":112707518,"end":112846239,"band":"5q22.2","note":"Familial adenomatous polyposis"},{"n":"NPM1","bp":171387116,"end":171411810,"band":"5q35.1","note":"Mutated in AML"},{"n":"NSD1","bp":177131830,"end":177300213,"band":"5q35.3","note":"Sotos syndrome"}],"6":[{"n":"DEK","bp":18223860,"end":18264548,"band":"6p22.3","note":"t(6;9) DEK::NUP214 AML"},{"n":"HLA-A","bp":29941260,"end":29949572,"band":"6p22.1","note":"MHC class I region"},{"n":"MYB","bp":135181308,"end":135219173,"band":"6q23.3","note":"MYB oncogene"}],"7":[{"n":"EGFR","bp":55019017,"end":55211628,"band":"7p11.2","note":"Lung cancer, glioma"},{"n":"ELN","bp":74027789,"end":74069907,"band":"7q11.23","note":"Williams–Beuren region"},{"n":"CFTR","bp":117287120,"end":117715971,"band":"7q31.2–q31.31","note":"Cystic fibrosis"}],"8":[{"n":"FGFR1","bp":38400215,"end":38468834,"band":"8p11.23","note":"8p11 myeloid/lymphoid neoplasms"},{"n":"RUNX1T1","bp":91954972,"end":92103286,"band":"8q21.3","note":"t(8;21) RUNX1::RUNX1T1 AML"},{"n":"MYC","bp":127735434,"end":127742951,"band":"8q24.21","note":"t(8;14) Burkitt lymphoma"}],"9":[{"n":"JAK2","bp":4984390,"end":5129948,"band":"9p24.1","note":"V617F in MPN"},{"n":"CDKN2A","bp":21967752,"end":21995301,"band":"9p21.3","note":"9p21 deletion"},{"n":"ABL1","bp":130713043,"end":130887675,"band":"9q34.12","note":"t(9;22) BCR::ABL1"}],"10":[{"n":"RET","bp":43077064,"end":43130351,"band":"10q11.21","note":"MEN2"},{"n":"PTEN","bp":87862638,"end":87971930,"band":"10q23.31","note":"PTEN hamartoma tumour syndrome"}],"11":[{"n":"WT1","bp":32387775,"end":32435564,"band":"11p13","note":"Wilms tumour, WAGR"},{"n":"CCND1","bp":69641156,"end":69654474,"band":"11q13.3","note":"t(11;14) mantle cell lymphoma"},{"n":"ATM","bp":108223044,"end":108369102,"band":"11q22.3","note":"Ataxia-telangiectasia; del(11q) CLL"},{"n":"KMT2A","bp":118436456,"end":118526832,"band":"11q23.3","note":"11q23 KMT2A rearrangements"}],"12":[{"n":"ETV6","bp":11649674,"end":11895377,"band":"12p13.2","note":"t(12;21) ETV6::RUNX1 ALL"},{"n":"KRAS","bp":25205246,"end":25250936,"band":"12p12.1","note":"RAS oncogene"},{"n":"PAH","bp":102836889,"end":102958410,"band":"12q23.2","note":"Phenylketonuria"}],"13":[{"n":"FLT3","bp":28003274,"end":28100592,"band":"13q12.2","note":"FLT3-ITD in AML"},{"n":"BRCA2","bp":32315086,"end":32400268,"band":"13q13.1","note":"Hereditary breast/ovarian cancer"},{"n":"RB1","bp":48303744,"end":48599436,"band":"13q14.2","note":"Retinoblastoma; del(13q14)"}],"14":[{"n":"SERPINA1","bp":94376747,"end":94390693,"band":"14q32.13","note":"Alpha-1 antitrypsin deficiency"},{"n":"IGH","bp":105851705,"end":105856218,"band":"14q32.33","note":"IGH locus; t(8;14), t(11;14), t(14;18)"}],"15":[{"n":"SNRPN","bp":24823637,"end":24978723,"band":"15q11.2","note":"Prader–Willi / Angelman region"},{"n":"FBN1","bp":48408313,"end":48645721,"band":"15q21.1","note":"Marfan syndrome"},{"n":"PML","bp":73994673,"end":74047827,"band":"15q24.1","note":"t(15;17) PML::RARA APL"}],"16":[{"n":"TSC2","bp":2047967,"end":2089491,"band":"16p13.3","note":"Tuberous sclerosis"},{"n":"MYH11","bp":15703135,"end":15857028,"band":"16p13.11","note":"inv(16) CBFB::MYH11"},{"n":"CBFB","bp":67028984,"end":67101058,"band":"16q22.1","note":"inv(16)/t(16;16) AML"}],"17":[{"n":"TP53","bp":7661779,"end":7687538,"band":"17p13.1","note":"del(17p); Li–Fraumeni"},{"n":"NF1","bp":31094927,"end":31382116,"band":"17q11.2","note":"Neurofibromatosis type 1"},{"n":"RARA","bp":40309180,"end":40357643,"band":"17q21.2","note":"t(15;17) PML::RARA APL"},{"n":"BRCA1","bp":43044295,"end":43170245,"band":"17q21.31","note":"Hereditary breast/ovarian cancer"}],"18":[{"n":"SMAD4","bp":51028528,"end":51085045,"band":"18q21.2","note":"Juvenile polyposis"},{"n":"BCL2","bp":63123346,"end":63320128,"band":"18q21.33","note":"t(14;18) follicular lymphoma"}],"19":[{"n":"STK11","bp":1177558,"end":1228431,"band":"19p13.3","note":"Peutz–Jeghers syndrome"},{"n":"LDLR","bp":11089418,"end":11133820,"band":"19p13.2","note":"Familial hypercholesterolaemia"},{"n":"CEBPA","bp":33299934,"end":33302534,"band":"19q13.11","note":"Mutated in AML"}],"20":[{"n":"JAG1","bp":10637684,"end":10673999,"band":"20p12.2","note":"Alagille syndrome"},{"n":"ASXL1","bp":32358330,"end":32439319,"band":"20q11.21","note":"Myeloid neoplasms"},{"n":"GNAS","bp":58839718,"end":58911192,"band":"20q13.32","note":"McCune–Albright; pseudohypoparathyroidism"}],"21":[{"n":"APP","bp":25880535,"end":26171128,"band":"21q21.3","note":"Early-onset Alzheimer disease"},{"n":"RUNX1","bp":34787801,"end":36004667,"band":"21q22.12","note":"t(8;21), t(12;21); familial platelet disorder"},{"n":"ERG","bp":38380027,"end":38661780,"band":"21q22.2","note":"ERG fusions"}],"22":[{"n":"TBX1","bp":19756703,"end":19783593,"band":"22q11.21","note":"22q11.2 deletion region"},{"n":"BCR","bp":23179704,"end":23318037,"band":"22q11.23","note":"t(9;22) BCR::ABL1"},{"n":"NF2","bp":29603556,"end":29698598,"band":"22q12.2","note":"NF2-related schwannomatosis"}],"X":[{"n":"SHOX","bp":624344,"end":659411,"band":"Xp22.33","note":"PAR1; short stature"},{"n":"DMD","bp":31097677,"end":33339609,"band":"Xp21.2–p21.1","note":"Duchenne / Becker"},{"n":"AR","bp":67544021,"end":67730619,"band":"Xq12","note":"Androgen insensitivity"},{"n":"XIST","bp":73820649,"end":73852723,"band":"Xq13.2","note":"X-inactivation centre"},{"n":"FMR1","bp":147911919,"end":147951125,"band":"Xq27.3","note":"Fragile X (FRAXA)"},{"n":"MECP2","bp":154021573,"end":154137103,"band":"Xq28","note":"Rett syndrome; Xq28 duplication"}],"Y":[{"n":"SRY","bp":2786855,"end":2787682,"band":"Yp11.2","note":"Testis determination"},{"n":"USP9Y","bp":12537650,"end":12860839,"band":"Yq11.221","note":"AZFa region"},{"n":"DAZ1","bp":23129355,"end":23199010,"band":"Yq11.223","note":"AZFc region"}]};
 const TOP = 18, CW = 30;
+const LVNAME = lv => lv==="850" ? "~700" : lv;   // data key "850" holds the GRCh38 idiogram, which ISCN 2024 says best fits the 700-band level
 const state = {chr:"X", levels:new Set(["400","550","850"]), kgLevel:"400", mode:"R", showGenes:true, sel:null};
 
 const R_FILL = s => s==="gneg"?"var(--ink)":s==="gpos25"?"var(--r25)":s==="gpos50"?"var(--r50)":s==="gpos75"?"var(--r75)":s==="acen"?"var(--acen)":s==="gvar"?"url(#hatch)":s==="stalk"?"var(--stalk)":"var(--paper)";
@@ -325,8 +330,8 @@ function drawLevel(chr,lv,H){
   const geneW = genes?78:6, gW = 0, labW=70;
   const W = geneW + gW + CW + 12 + labW;
   const box=document.createElement("div"); box.className="level";
-  box.innerHTML=`<h3>${lv} bands</h3><div class="sub">${bands.length} bands on ${chr}</div>`;
-  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded ideogram at ${lv}-band level`},box);
+  box.innerHTML=`<h3>${LVNAME(lv)} bands${lv==="850"?' <span class="sub">GRCh38</span>':""}</h3><div class="sub">${bands.length} bands on ${chr}</div>`;
+  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded ideogram at ${LVNAME(lv)}-band level`},box);
   addHatch(svg);
   drawChromosome(svg,bands,geneW,CW,TOP,scale,FILL(),(r,b)=>{
     r.setAttribute("class","band"); r.dataset.lv=lv; r.dataset.name=b[0]; r.setAttribute("tabindex","0");
@@ -410,12 +415,12 @@ function showInfo(lv,name){
   const chr=state.chr, b=DATA[chr][lv].find(x=>x[0]===name); if(!b) return;
   const s=b[3], e=b[4];
   state.sel={lv,name,s,e}; highlight(state.sel);
-  const others=["400","550","850"].filter(l=>l!==lv).map(l=>`<dt>${l} level</dt><dd>${overlapping(l,s,e).map(x=>chr+x[0]).join(", ")}</dd>`).join("");
+  const others=["400","550","850"].filter(l=>l!==lv).map(l=>`<dt>${LVNAME(l)} level</dt><dd>${overlapping(l,s,e).map(x=>chr+x[0]).join(", ")}</dd>`).join("");
   const gl=(GENES[chr]||[]).filter(g=>g.end>=s && g.bp<=e).map(g=>`<b>${g.n}</b> <span style="color:var(--muted)">${g.band} · ${g.note}</span>`).join("<br>");
   const warn = b[5]==="gvar" ? '<p class="warn">Heterochromatic and polymorphic in size. Shown as a hatch because its appearance is not a simple inversion between G- and R-banding.</p>'
              : b[5]==="stalk" ? '<p class="warn">Nucleolar organizer stalk. Length and staining vary between homologues and individuals.</p>' : "";
   document.getElementById("info").innerHTML=`
-    <div class="eyebrow">${lv}-band level</div>
+    <div class="eyebrow">${LVNAME(lv)}-band level${lv==="850"?" · GRCh38":""}</div>
     <h3>${chr}${b[0]}</h3>
     <dl class="kv" style="margin-top:10px">
       ${state.mode==="R"

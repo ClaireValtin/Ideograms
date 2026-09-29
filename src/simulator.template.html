@@ -86,6 +86,7 @@ input[type=range]{accent-color:var(--turq)}
 .notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;max-width:92ch;font-size:14px;color:var(--fg)}
 .notes li::marker{color:var(--turq)}
 
+@media (max-width:560px){.tabs svg{display:none}.tabs a{padding:6px 9px}}
 /* ---- page ---- */
 .main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
 @media (max-width:880px){.main{grid-template-columns:minmax(0,1fr)}}
@@ -119,6 +120,7 @@ input[type=range]{width:100%;margin:2px 0}
     <div class="tabs">
       <a href="__IDEO_HREF__"__IDEO_TGT__ ><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
       <a href="__SIM_HREF__"__SIM_TGT__ aria-current="page"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
+      <a href="__ABN_HREF__"__ABN_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
     </div>
   </div>
 </nav>
@@ -126,7 +128,7 @@ input[type=range]{width:100%;margin:2px 0}
   <header>
     <div class="eyebrow">Simulated brightfield · RHG · human chromosomes</div>
     <h1>Chromosomes as they look under the microscope</h1>
-    <p>Synthetic metaphase images built from the 850-band map: two sister chromatids, bands that merge as the chromosome condenses, uneven stain, bending, optical blur and grain. Look at one chromosome closely or at a whole simulated karyogram. Each "New spread" draws different homologues. It is a model of what you would see, not a photograph.</p>
+    <p>Synthetic metaphase images built from the GRCh38 idiogram (about the ISCN 700-band level): two sister chromatids, bands that merge as the chromosome condenses, uneven stain, bending, optical blur and grain. Look at one chromosome closely or at a whole simulated karyogram. Each "New spread" draws different homologues. It is a model of what you would see, not a photograph.</p>
   </header>
 
   <div class="main">
@@ -159,7 +161,7 @@ input[type=range]{width:100%;margin:2px 0}
 
       <div class="ctl">
         <div class="ctl-top"><label for="res">Condensation</label><output id="resOut">~550 bands</output></div>
-        <input type="range" id="res" min="300" max="850" step="25" value="350">
+        <input type="range" id="res" min="300" max="700" step="25" value="350">
         <p class="help">Low = short metaphase, sub-bands merge. High = long prometaphase.</p>
       </div>
       <div class="ctl">
@@ -206,9 +208,9 @@ input[type=range]{width:100%;margin:2px 0}
   <section class="card notes">
     <h2>What is modelled, and what is guessed</h2>
     <ul>
-      <li><b>Banding.</b> Starts from the NCBI 850-band map (GRCh38, ISCN units), inverted to the R pattern. Condensation is simulated by smoothing that profile, so at lower band levels neighbouring sub-bands merge the way they do on real slides. This is an approximation of condensation, not a physical model of it.</li>
+      <li><b>Banding.</b> Starts from the NCBI GRCh38 idiogram (ISCN units), which ISCN 2024 says best fits the 700-band level, inverted to the R pattern. Condensation is simulated by smoothing that profile, so at lower band levels neighbouring sub-bands merge the way they do on real slides. This is an approximation of condensation, not a physical model of it.</li>
       <li><b>Intensity.</b> Each R-positive band gets a random ±12% intensity change so they are not all identical. Real differences between R-positive bands are not in the source data, so these values are illustrative. Terminal R-positive bands are drawn slightly darker, consistent with R-banded chromosome ends being "almost always positive".</li>
-      <li><b>Heterochromatin.</b> 1q12, 9q12, 16q11.2, Yq12 and the acrocentric satellites and short arms vary in size between homologues here, as they do in people. I could not find a source describing their RHG staining, so their tone is a setting. The default "Pale" is my inference from heat denaturation affecting AT-rich regions more; treat it as unverified.</li>
+      <li><b>Heterochromatin.</b> 1q12, 9q12, 16q11.2, Yq12 and the acrocentric satellites and short arms vary in size between homologues here, as they do in people; ISCN 2024 (section 2.2.2) describes them as variable in size and staining intensity with R-banding too. I could not find a source describing their RHG staining, so their tone is a setting. The default "Pale" is my inference from heat denaturation affecting AT-rich regions more; treat it as unverified.</li>
       <li><b>Acrocentrics.</b> Stalks (p12 of 13, 14, 15, 21 and 22) are drawn thinner and paler, and their length varies between homologues, which is normal. The short arms are drawn at about half their ISCN ideogram length, because ideograms draw them larger than they usually appear on slides. That scaling is my judgement, not a measured value.</li>
       <li><b>Geometry.</b> Two sister chromatids joined at a primary constriction, a curved axis, small width irregularities and rounded ends. Twisted or crossing chromatids, splayed chromatid ends, overlapping chromosomes and nuclei in the field are not simulated. Relative lengths follow ISCN units, so chromosome sizes are proportional to each other.</li>
       <li><b>Magnification.</b> In the one-chromosome view, small chromosomes are enlarged to fill the field; the caption states the magnification relative to chromosome 1. The karyogram keeps every chromosome at the same scale, aligned on the centromere.</li>
@@ -337,7 +339,7 @@ function render(){
   const dpr=Math.min(2,window.devicePixelRatio||1), W=Math.round(cssW*dpr), H=Math.round(cssH*dpr);
   cv.width=W; cv.height=H; cv.style.height=cssH+"px";
   const r=rng(S.seed*7919+13), buf={W,H,occ:new Float32Array(W*H),stn:new Float32Array(W*H)};
-  const frac=(S.res-300)/550, sigmaUnits=16000/S.res;
+  const frac=(S.res-300)/400, sigmaUnits=16000/S.res;
   let cap="", rad;
   if(S.view==="single"){
     const chr=S.chr, total=DATA[chr]["850"].at(-1)[2];
@@ -392,7 +394,7 @@ function render(){
 }
 
 function drawIdeogram(chr,W,H,dpr,L){
-  const lv = S.res>=700?"850":S.res>=475?"550":"400";
+  const lv = S.res>=625?"850":S.res>=475?"550":"400";
   const bands=DATA[chr][lv], total=bands.at(-1)[2], len=L*(total/DATA[chr]["850"].at(-1)[2]);
   const w=12*dpr, x=W*0.83, y0=(H-len)/2, sc=len/total;
   const col=s=>s==="gneg"?"#2a2330":s==="gpos25"?"#6c6572":s==="gpos50"?"#a59eab":s==="gpos75"?"#cfc9d3":s==="acen"?"#5fd4c7":s==="gvar"?"#b9b2bf":s==="stalk"?"#e3dfe6":"#f6f4f7";
@@ -406,7 +408,7 @@ function drawIdeogram(chr,W,H,dpr,L){
   let last=-1e9; const gap=13*dpr;
   for(const b of DATA[chr]["400"]){ if(b[5]==="acen") continue; const yy=y0+((b[1]+b[2])/2)*(len/DATA[chr]["400"].at(-1)[2]); if(yy-last<gap) continue; ctx.fillText(b[0],x+w/2+6*dpr,yy); last=yy; }
   ctx.fillStyle="#0b7a73"; ctx.font=`600 ${11*dpr}px "IBM Plex Sans", system-ui, sans-serif`; ctx.textAlign="center";
-  ctx.fillText(`Ideogram ${lv}`,x+22*dpr,y0-12*dpr);
+  ctx.fillText(`Idiogram ${lv==="850"?"~700":lv}`,x+22*dpr,y0-12*dpr);
   ctx.restore();
 }
 

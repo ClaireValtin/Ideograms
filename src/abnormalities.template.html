@@ -1,0 +1,774 @@
+<title>Chromosome Abnormality Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Palette: graphite neutrals with black and white, turquoise primary, orange for actions and highlights, green for genes.
+   Layout: sticky app bar with page tabs, then a working surface of flat cards on a cool grey ground. */
+:root{
+  --bg:#f3f4f5; --surface:#ffffff; --surface-2:#f7f8f9; --fg:#0c0e10; --muted:#5d636b; --line:#e2e4e7;
+  --turq:#0e9f96; --turq-ink:#0b7a73; --turq-soft:#e0f5f3; --on-turq:#ffffff;
+  --orange:#ea580c; --orange-hover:#c2410c; --orange-soft:#fff1e8; --on-orange:#ffffff;
+  --green:#15803d;
+  --accent:var(--turq-ink); --accent-soft:var(--turq-soft); --hl:#f97316;
+  --ink:#111315; --paper:#ffffff; --outline:#1f2226;
+  --r25:#6a6f76; --r50:#b3b7bc; --r75:#dcdee1;
+  --g25:#c9ccd0; --g50:#8c9097; --g75:#50545a;
+  --acen:#5fd4c7; --gvar:#8c9097; --stalk:#e6e8ea;
+  --f-display:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-body:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0a0b0c; --surface:#131517; --surface-2:#1a1d20; --fg:#f2f3f4; --muted:#9aa0a7; --line:#272a2e;
+  --turq:#2dd4bf; --turq-ink:#2dd4bf; --turq-soft:#0f2e2b; --on-turq:#04201d;
+  --orange:#fb8a3c; --orange-hover:#fdba74; --orange-soft:#2e1a0c; --on-orange:#1b0e05;
+  --green:#4ade80;
+  --hl:#fb923c;
+  --ink:#0f1112; --paper:#eceef0; --outline:#c9cdd1;
+  --r25:#5b6067; --r50:#a3a8ae; --r75:#c9cdd1;
+  --g25:#b6babf; --g50:#7c8187; --g75:#45494e;
+  --acen:#2cc4b3; --gvar:#7c8187; --stalk:#d9dcdf; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0a0b0c; --surface:#131517; --surface-2:#1a1d20; --fg:#f2f3f4; --muted:#9aa0a7; --line:#272a2e;
+  --turq:#2dd4bf; --turq-ink:#2dd4bf; --turq-soft:#0f2e2b; --on-turq:#04201d;
+  --orange:#fb8a3c; --orange-hover:#fdba74; --orange-soft:#2e1a0c; --on-orange:#1b0e05;
+  --green:#4ade80;
+  --hl:#fb923c;
+  --ink:#0f1112; --paper:#eceef0; --outline:#c9cdd1;
+  --r25:#5b6067; --r50:#a3a8ae; --r75:#c9cdd1;
+  --g25:#b6babf; --g50:#7c8187; --g75:#45494e;
+  --acen:#2cc4b3; --gvar:#7c8187; --stalk:#d9dcdf; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+/* app bar */
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
+.appbar-in{max-width:1180px;margin:0 auto;padding-inline:16px;height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font:650 16px var(--f-body);letter-spacing:-.02em;color:var(--fg);text-decoration:none;white-space:nowrap}
+.brand-mark{width:9px;height:24px;border-radius:5px;flex:none;background:linear-gradient(var(--fg) 0 20%,var(--turq) 20% 32%,var(--fg) 32% 46%,var(--bg) 46% 52%,var(--fg) 52% 66%,var(--orange) 66% 76%,var(--fg) 76%)}
+.tabs{display:flex;gap:2px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tabs a{display:inline-flex;align-items:center;gap:6px;font:500 13.5px var(--f-body);color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:7px;white-space:nowrap}
+.tabs a:hover{color:var(--fg)}
+.tabs a[aria-current="page"]{background:var(--fg);color:var(--bg)}
+.tabs .sm{display:none}
+@media (max-width:560px){.tabs .lg{display:none}.tabs .sm{display:inline}.brand .brand-name{display:none}}
+/* page frame */
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:32px 56px;display:flex;flex-direction:column;gap:20px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--turq-ink);margin-bottom:10px}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:2px;background:var(--orange)}
+header h1,h1{font-family:var(--f-display);font-weight:650;font-size:clamp(28px,4.4vw,44px);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.035em}
+header p{margin:12px 0 0;color:var(--muted);max-width:68ch;font-size:15.5px}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+/* buttons */
+.btn-scope{display:inline-flex;align-items:center;gap:8px;font:600 14px var(--f-body);color:var(--on-orange);background:var(--orange);border:0;border-radius:10px;padding:9px 15px;text-decoration:none;white-space:nowrap;cursor:pointer;box-shadow:0 1px 0 rgba(0,0,0,.08)}
+.btn-scope:hover{background:var(--orange-hover)}
+.btn-scope svg{flex:none}
+.btn-ghost{font:500 14px var(--f-body);color:var(--fg);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:1px}
+.btn-ghost:hover{border-color:var(--fg)}
+.btn{font:600 14px var(--f-body);border:0;background:var(--turq);color:var(--on-turq);padding:10px 14px;border-radius:10px;cursor:pointer}
+.btn:hover{filter:brightness(1.07)}
+/* shared controls */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:3px;background:var(--surface-2);flex-wrap:wrap;gap:2px}
+.seg button{font:500 13px var(--f-body);border:0;background:transparent;color:var(--muted);padding:5px 12px;border-radius:7px;cursor:pointer}
+.seg button:hover{color:var(--fg)}
+.seg button[aria-pressed="true"]{background:var(--turq);color:var(--on-turq)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--turq);width:16px;height:16px;margin:0}
+input[type=range]{accent-color:var(--turq)}
+.seg button:focus-visible,.chip:focus-visible,.chips button:focus-visible,.btn:focus-visible,.btn-scope:focus-visible,.tabs a:focus-visible,.toggle input:focus-visible,input:focus-visible,.kg-chr:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.notes{padding:18px 20px}
+.notes h2{font:600 17px var(--f-display);letter-spacing:-.01em;margin:0 0 10px}
+.notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;max-width:92ch;font-size:14px;color:var(--fg)}
+.notes li::marker{color:var(--turq)}
+
+/* ---- page ---- */
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+@media (max-width:900px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.card-pad{padding:18px 20px}
+.card h2{font:600 18px var(--f-display);letter-spacing:-.015em;margin:0}
+.card .sub{color:var(--muted);font-size:13.5px;margin:4px 0 0}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.iscn-input{flex:1 1 320px;min-width:0;font:500 15px var(--f-mono);padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);color:var(--fg)}
+.iscn-input:focus{outline:2px solid var(--turq);outline-offset:1px}
+.msg{font-size:13.5px;margin:8px 0 0;min-height:1.2em}
+.msg.err{color:var(--orange)}
+.msg.ok{color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.preset{font:500 12.5px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:5px 10px;border-radius:8px;cursor:pointer;text-align:left}
+.preset b{font-family:var(--f-mono);font-weight:500}
+.preset:hover{border-color:var(--turq)}
+.lab{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-family:var(--f-mono)}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tool{display:flex;flex-direction:column;align-items:flex-start;gap:1px;font:500 13px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:7px 11px;border-radius:9px;cursor:pointer;min-width:0}
+.tool small{font:11px var(--f-mono);color:var(--muted)}
+.tool[aria-pressed="true"]{border-color:var(--turq);background:var(--turq-soft)}
+.tool:hover{border-color:var(--turq)}
+select{font:500 14px var(--f-mono);padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg)}
+.bench-wrap{margin-top:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);overflow-x:auto}
+#bench{display:block;touch-action:none;user-select:none}
+.instr{font-size:14px;margin:12px 0 0}
+.instr b{font-family:var(--f-mono);font-weight:500}
+.pending{font:500 15px var(--f-mono);margin:10px 0 0;min-height:1.3em}
+.btn-line{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn-sec{font:600 14px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:9px 13px;border-radius:10px;cursor:pointer}
+.btn-sec:hover{border-color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+.karyo{font:600 clamp(16px,2.4vw,21px) var(--f-mono);letter-spacing:-.01em;word-break:break-word;margin:8px 0 0}
+.copy{font:500 12.5px var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:4px 10px;border-radius:7px;cursor:pointer}
+.items{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.item{display:inline-flex;align-items:center;gap:6px;font:500 13px var(--f-mono);border:1px solid var(--line);border-radius:8px;padding:3px 4px 3px 9px;background:var(--surface)}
+.item button{border:0;background:transparent;color:var(--muted);font-size:16px;line-height:1;cursor:pointer;padding:2px 6px;border-radius:5px}
+.item button:hover{background:var(--orange-soft);color:var(--orange)}
+.detail{margin:14px 0 0;display:flex;flex-direction:column;gap:6px}
+.detail div{font:13px var(--f-mono);color:var(--fg);word-break:break-word}
+.detail div span{color:var(--muted)}
+.genes{font-size:13.5px;margin-top:12px;color:var(--muted)}
+.genes b{color:var(--green);font-weight:600}
+.view-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.result-wrap{margin-top:14px;overflow-x:auto;border-radius:12px}
+#resultSvg{display:block}
+#resultCv{display:block;width:100%;height:auto;border-radius:10px}
+.empty{color:var(--muted);font-size:14px;padding:24px 4px}
+.legend-line{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted);margin-top:10px}
+.legend-line i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:6px}
+.sw-unknown{background:repeating-linear-gradient(45deg,var(--muted) 0 2px,var(--surface) 2px 5px)}
+@media (max-width:560px){.tabs svg{display:none}.tabs a{padding:6px 9px}}
+</style>
+
+<nav class="appbar" aria-label="Site">
+  <div class="appbar-in">
+    <a class="brand" href="__IDEO_HREF__"__IDEO_TGT__><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Ideograms</span></a>
+    <div class="tabs">
+      <a href="__IDEO_HREF__"__IDEO_TGT__ ><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
+      <a href="__SIM_HREF__"__SIM_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
+      <a href="__ABN_HREF__"__ABN_TGT__ aria-current="page"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
+    </div>
+  </div>
+</nav>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ISCN 2024 · structural and numerical abnormalities</div>
+    <h1>Build a chromosome abnormality</h1>
+    <p>Type an ISCN karyotype, or cut chromosomes by hand: click a band to place a breakpoint, drag the marker to move it and watch the result and the ISCN description update. Each abnormality is shown as idiograms and as a simulated microscope image, next to the normal homologue.</p>
+  </header>
+
+  <section class="card card-pad" aria-labelledby="h-type">
+    <h2 id="h-type">Type a karyotype</h2>
+    <p class="sub">Short-system ISCN: t, der(…)t, del, dup, inv, i, r, add, gains and losses. Example: 46,XY,t(9;22)(q34;q11.2)</p>
+    <div class="row" style="margin-top:12px">
+      <input class="iscn-input" id="iscnIn" spellcheck="false" autocomplete="off" aria-label="ISCN karyotype" value="46,XY,t(9;22)(q34;q11.2)">
+      <button class="btn" id="iscnGo">Show it</button>
+    </div>
+    <p class="msg ok" id="iscnMsg"></p>
+    <div class="presets" id="presets" aria-label="Examples"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="card card-pad" aria-labelledby="h-build">
+      <h2 id="h-build">Or build it by hand</h2>
+      <p class="sub">Pick what happens, pick the chromosome(s), then click the bands where the breaks are.</p>
+      <div class="tools" id="tools" role="group" aria-label="Abnormality type"></div>
+      <div class="row" style="margin-top:12px">
+        <span class="lab">Chromosome</span>
+        <select id="pickA" aria-label="First chromosome"></select>
+        <span id="pickBWrap" class="row" style="gap:10px"><span class="lab">and</span><select id="pickB" aria-label="Second chromosome"></select></span>
+        <span class="lab" style="margin-left:8px">Bands</span>
+        <div class="seg" role="group" aria-label="Band level">
+          <button data-lvl="400" aria-pressed="false">400</button>
+          <button data-lvl="550" aria-pressed="true">550</button>
+        </div>
+      </div>
+      <div class="bench-wrap"><svg id="bench" role="img" aria-label="Chromosomes to cut"></svg></div>
+      <p class="instr" id="instr"></p>
+      <p class="pending" id="pending"></p>
+      <div class="btn-line">
+        <button class="btn" id="commit" disabled>Add to karyotype</button>
+        <button class="btn-sec" id="clearCuts">Clear breakpoints</button>
+      </div>
+    </section>
+
+    <aside class="card card-pad" aria-labelledby="h-karyo">
+      <div class="view-head"><h2 id="h-karyo">Karyotype</h2>
+        <div class="seg" role="group" aria-label="Sex chromosomes">
+          <button data-sex="XX" aria-pressed="false">XX</button>
+          <button data-sex="XY" aria-pressed="true">XY</button>
+        </div>
+      </div>
+      <div class="row" style="justify-content:space-between;margin-top:6px"><span class="lab">ISCN (short system)</span><button class="copy" id="copyBtn">Copy</button></div>
+      <p class="karyo" id="karyo"></p>
+      <div class="items" id="items"></div>
+      <div class="lab" style="margin-top:16px">Detailed system</div>
+      <div class="detail" id="detail"></div>
+      <div class="genes" id="genes"></div>
+      <div class="btn-line"><button class="btn-sec" id="resetAll">Start again (normal karyotype)</button></div>
+    </aside>
+  </div>
+
+  <section class="card card-pad" aria-labelledby="h-view">
+    <div class="view-head">
+      <h2 id="h-view">Affected chromosomes</h2>
+      <div class="row">
+        <div class="seg" role="group" aria-label="View">
+          <button data-view="idio" aria-pressed="true">Idiogram</button>
+          <button data-view="scope" aria-pressed="false">Microscope</button>
+        </div>
+        <div class="seg" role="group" aria-label="Banding" id="bandSeg">
+          <button data-band="R" aria-pressed="true">R</button>
+          <button data-band="G" aria-pressed="false">G</button>
+        </div>
+        <button class="btn-sec" id="respread" hidden>New spread</button>
+      </div>
+    </div>
+    <div class="legend-line" id="legendLine"></div>
+    <div class="result-wrap" id="resultWrap"><svg id="resultSvg" role="img" aria-label="Normal and abnormal chromosomes"></svg><canvas id="resultCv" hidden aria-label="Simulated microscope image of the abnormal chromosomes"></canvas></div>
+  </section>
+
+  <section class="card notes">
+    <h2>How to read this, and its limits</h2>
+    <ul>
+      <li><b>Breakpoints sit in the middle of the band you pick.</b> ISCN places a break "in" a band without saying where inside it, so the drawing uses the band's midpoint. Pick 400 or 550 bands to match the resolution of your preparation; ISCN karyotypes use the band level actually resolved, e.g. t(9;22)(q34;q11.2).</li>
+      <li><b>Band names you can type.</b> Any band or sub-band name from the 400, 550 or GRCh38 (~700) idiogram, or a parent band such as 22q11.2 (the break then sits in the middle of its sub-bands). p10 and q10 are the centromere.</li>
+      <li><b>Ordering follows ISCN 2024 section 4.3.</b> Normal sex chromosomes first (an abnormal X or Y is left out of the sex complement, e.g. 46,X,t(X;13)), then sex-chromosome abnormalities, then autosomes in numerical order, numerical before structural for the same chromosome. Sex-chromosome gains and losses are written constitutionally (47,XXY; 45,X), not as acquired +X/–Y.</li>
+      <li><b>What is not supported.</b> Insertions, dicentrics, markers, three-way translocations, inverted duplications, mosaics and clone counts. For neoplasia, add the cell count in square brackets yourself, e.g. [20].</li>
+      <li><b>Derivatives are drawn from the band data.</b> Each piece keeps its own bands, so a translocated segment shows the banding of the chromosome it came from; the coloured strip beside each chromosome shows which chromosome each part comes from.</li>
+      <li><b>The microscope view</b> uses the simulator engine, with the same unverified choices for band intensity and heterochromatin tone described on the simulator page.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const DATA = __DATA__;
+const GENES = __GENES__;
+const ORDER = ["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","X","Y"];
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a={},p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const MINUS="–";
+
+// ================= chromosome geometry (genomic coordinates) =================
+const Lbp = c => DATA[c]["850"].at(-1)[4];
+const cenBp = c => DATA[c]["550"].find(b=>b[0].startsWith("q"))[3];
+const armOf = (c,bp) => bp < cenBp(c) ? "p" : "q";
+function isChild(child,parent){
+  if(child===parent || child.startsWith(parent+".")) return true;
+  return parent.includes(".") && child.startsWith(parent) && /^\d+$/.test(child.slice(parent.length));
+}
+// Resolve a typed band name to a genomic interval; the break sits at its midpoint.
+function resolveBand(c,name){
+  if(!DATA[c]) return null;
+  if(name==="p10"||name==="q10"){ const m=cenBp(c); return {name,s:m,e:m,mid:m}; }
+  for(const lv of ["550","400","850"]){ const b=DATA[c][lv].find(x=>x[0]===name); if(b) return {name,s:b[3],e:b[4],mid:(b[3]+b[4])/2}; }
+  for(const lv of ["850","550","400"]){
+    const kids=DATA[c][lv].filter(x=>isChild(x[0],name));
+    if(kids.length){ const s=Math.min(...kids.map(k=>k[3])), e=Math.max(...kids.map(k=>k[4])); return {name,s,e,mid:(s+e)/2}; }
+  }
+  return null;
+}
+function bandAt(c,lv,bp){ const bs=DATA[c][lv]; return bs.find(b=>bp>=b[3]&&bp<=b[4]) || (bp<bs[0][3]?bs[0]:bs.at(-1)); }
+const bp = (c,name) => resolveBand(c,name);
+
+// ================= abnormalities → derivative chromosomes =================
+// A chromosome is a list of segments {c, s, e} in genomic coordinates, read pter→qter; s>e means inverted.
+const SEG=(c,s,e)=>({c,s,e});
+function distal(c,b){ return armOf(c,b.mid)==="p" ? SEG(c,b.mid,0) : SEG(c,b.mid,Lbp(c)); }
+function rev(seg){ return {...seg,s:seg.e,e:seg.s}; }
+function derOf(A,a,B,b){
+  if(armOf(A,a.mid)==="q") return [SEG(A,0,a.mid), distal(B,b)];
+  return [rev(distal(B,b)), SEG(A,a.mid,Lbp(A))];
+}
+function chromosomesFor(it){
+  const c=it.c, L=Lbp(c||"1");
+  switch(it.type){
+    case "t":   return [{c:it.a,label:`der(${it.a})`,segs:derOf(it.a,it.ba,it.b,it.bb)},{c:it.b,label:`der(${it.b})`,segs:derOf(it.b,it.bb,it.a,it.ba)}];
+    case "der": return [{c:it.a,label:`der(${it.a})`,segs:derOf(it.a,it.ba,it.b,it.bb)}];
+    case "del": if(!it.b2) return [{c,label:`del(${c})`,segs: armOf(c,it.b1.mid)==="q" ? [SEG(c,0,it.b1.mid)] : [SEG(c,it.b1.mid,L)]}];
+                return [{c,label:`del(${c})`,segs:[SEG(c,0,it.b1.mid),SEG(c,it.b2.mid,L)]}];
+    case "dup": return [{c,label:`dup(${c})`,segs:[SEG(c,0,it.b2.mid),SEG(c,it.b1.mid,L)]}];
+    case "inv": return [{c,label:`inv(${c})`,segs:[SEG(c,0,it.b1.mid),SEG(c,it.b2.mid,it.b1.mid),SEG(c,it.b2.mid,L)]}];
+    case "i":   { const m=cenBp(c); return [{c,label:`i(${c})`,segs: it.arm==="q" ? [SEG(c,L,m),SEG(c,m,L)] : [SEG(c,0,m),SEG(c,m,0)]}]; }
+    case "r":   return [{c,label:`r(${c})`,ring:true,segs:[SEG(c,it.b1.mid,it.b2.mid)]}];
+    case "add": { const lost = armOf(c,it.b1.mid)==="q" ? L-it.b1.mid : it.b1.mid, unk={c:"?",len:lost*0.55};
+                  return [{c,label:`add(${c})`,segs: armOf(c,it.b1.mid)==="q" ? [SEG(c,0,it.b1.mid),unk] : [unk,SEG(c,it.b1.mid,L)]}]; }
+  }
+  return [];
+}
+function validate(it){
+  const needCen=(c,segs)=>segs.some(s=>s.c===c && Math.min(s.s,s.e)<=cenBp(c) && Math.max(s.s,s.e)>=cenBp(c));
+  if(it.type==="del" && it.b2 && it.b1.mid<cenBp(it.c) && it.b2.mid>cenBp(it.c)) return "Those two breakpoints would delete the centromere. A deletion must stay within one arm.";
+  if(it.type==="dup" && it.b1.mid<cenBp(it.c) && it.b2.mid>cenBp(it.c)) return "A duplication across the centromere would make a dicentric chromosome, which this tool does not draw.";
+  if(it.type==="r" && !(it.b1.mid<cenBp(it.c) && it.b2.mid>cenBp(it.c))) return "A ring needs one breakpoint on each arm, otherwise it has no centromere.";
+  if((it.type==="t"||it.type==="der") && it.a===it.b) return "Pick two different chromosomes for a translocation.";
+  if((it.type==="t"||it.type==="der") && (it.a==="Y"&&state.sex==="XX" || it.b==="Y"&&state.sex==="XX")) return "Switch the karyotype to XY to use chromosome Y.";
+  if(it.c==="Y" && state.sex==="XX") return "Switch the karyotype to XY to use chromosome Y.";
+  return null;
+}
+
+// ================= ISCN writing =================
+const ck = c => c==="X"?-2 : c==="Y"?-1 : parseInt(c,10);
+function shortOf(it){
+  const n=(x)=>x.name;
+  switch(it.type){
+    case "t": { let [A,B,a,b]=[it.a,it.b,it.ba,it.bb]; if(ck(B)<ck(A)) [A,B,a,b]=[B,A,b,a]; return `t(${A};${B})(${n(a)};${n(b)})`; }
+    case "der": { let [A,B,a,b]=[it.a,it.b,it.ba,it.bb]; if(ck(B)<ck(A)) [A,B,a,b]=[B,A,b,a]; return `der(${it.a})t(${A};${B})(${n(a)};${n(b)})`; }
+    case "del": return `del(${it.c})(${n(it.b1)}${it.b2?n(it.b2):""})`;
+    case "dup": case "inv": case "r": return `${it.type}(${it.c})(${n(it.b1)}${n(it.b2)})`;
+    case "i":   return `i(${it.c})(${it.arm}10)`;
+    case "add": return `add(${it.c})(${n(it.b1)})`;
+    case "gain": return `+${it.c}`;
+    case "loss": return `${MINUS}${it.c}`;
+  }
+}
+function sortKey(it){ const c = it.type==="t" ? [it.a,it.b].sort((x,y)=>ck(x)-ck(y))[0] : (it.a||it.c); return [ck(c), (it.type==="gain"||it.type==="loss")?0:1, it.type]; }
+function karyotypeString(){
+  const items=[...state.items].sort((x,y)=>{ const a=sortKey(x),b=sortKey(y); return a[0]-b[0]||a[1]-b[1]||(a[2]<b[2]?-1:a[2]>b[2]?1:0); });
+  let count=46; const sex={X:state.sex==="XX"?2:1, Y:state.sex==="XY"?1:0};
+  const parts=[];
+  for(const it of items){
+    if(it.type==="gain"){ count++; if(it.c==="X"||it.c==="Y") sex[it.c]++; else parts.push(shortOf(it)); continue; }
+    if(it.type==="loss"){ count--; if(it.c==="X"||it.c==="Y") sex[it.c]--; else parts.push(shortOf(it)); continue; }
+    for(const ch of involved(it)) if(ch==="X"||ch==="Y") sex[ch]--;   // the abnormal X/Y is written in the abnormality, not the sex complement
+    parts.push(shortOf(it));
+  }
+  const sexStr="X".repeat(Math.max(0,sex.X))+"Y".repeat(Math.max(0,sex.Y));
+  return [String(count)].concat(sexStr?[sexStr]:[]).concat(parts).join(",");
+}
+const involved = it => it.type==="t" ? [it.a,it.b] : it.type==="der" ? [it.a] : [it.c];
+function endName(c,v,seg,isStart){
+  if(v===0) return "pter"; if(v===Lbp(c)) return "qter";
+  if(v===cenBp(c)) return (seg && Math.max(seg.s,seg.e)>cenBp(c) ? "q10" : "p10");
+  return null;
+}
+function detailedOf(it){
+  const nm=x=>x.name;
+  switch(it.type){
+    case "t": case "der": {
+      const out=[]; const pairs = it.type==="t" ? [[it.a,it.ba,it.b,it.bb],[it.b,it.bb,it.a,it.ba]] : [[it.a,it.ba,it.b,it.bb]];
+      for(const [A,a,B,b] of pairs){
+        const bTer = armOf(B,b.mid)==="p" ? "pter" : "qter";
+        const txt = armOf(A,a.mid)==="q" ? `${A}pter→${A}${nm(a)}::${B}${nm(b)}→${B}${bTer}` : `${B}${bTer}→${B}${nm(b)}::${A}${nm(a)}→${A}qter`;
+        out.push([`der(${A})`,txt]);
+      }
+      return out;
+    }
+    case "del": if(!it.b2) return [[`del(${it.c})`, armOf(it.c,it.b1.mid)==="q" ? `pter→${nm(it.b1)}:` : `:${nm(it.b1)}→qter`]];
+                return [[`del(${it.c})`,`pter→${nm(it.b1)}::${nm(it.b2)}→qter`]];
+    case "dup": return [[`dup(${it.c})`,`pter→${nm(it.b2)}::${nm(it.b1)}→qter`]];
+    case "inv": return [[`inv(${it.c})`,`pter→${nm(it.b1)}::${nm(it.b2)}→${nm(it.b1)}::${nm(it.b2)}→qter`]];
+    case "i":   return [[`i(${it.c})`, it.arm==="q" ? "qter→q10::q10→qter" : "pter→p10::p10→pter"]];
+    case "r":   return [[`r(${it.c})`,`::${nm(it.b1)}→${nm(it.b2)}::`]];
+    case "add": return [[`add(${it.c})`, armOf(it.c,it.b1.mid)==="q" ? `pter→${nm(it.b1)}::?` : `?::${nm(it.b1)}→qter`]];
+  }
+  return [];
+}
+// Landmark genes lying in the breakpoint bands
+function genesAtBreaks(){
+  const hits=[];
+  for(const it of state.items){
+    const bs = it.type==="t"||it.type==="der" ? [[it.a,it.ba],[it.b,it.bb]] : [it.b1&&[it.c,it.b1], it.b2&&[it.c,it.b2]].filter(Boolean);
+    for(const [c,b] of bs){ for(const g of (GENES[c]||[])) if(g.end>=b.s && g.bp<=b.e) hits.push(`<b>${g.n}</b> in ${c}${b.name} (${g.note})`); }
+  }
+  return [...new Set(hits)];
+}
+
+// ================= ISCN parsing =================
+const BAND = "([pq]\\d+(?:\\.\\d+)?)";
+const CHR = "(\\d{1,2}|X|Y)";
+function parseKaryotype(str){
+  const s=str.replace(/\s+/g,"").replace(/[−—]/g,"–");
+  const toks=s.split(","); const errors=[]; const items=[];
+  if(!/^\d+$/.test(toks[0]||"")) return {error:"Start with the chromosome count, e.g. 46,XY,…"};
+  const count=parseInt(toks[0],10); let i=1, sexStr="";
+  if(toks[1]!==undefined && /^[XY]*$/.test(toks[1])){ sexStr=toks[1]; i=2; }
+  const res=(c,n)=>{ const r=resolveBand(c,n); if(!r) errors.push(`band ${c}${n} not found`); return r; };
+  for(;i<toks.length;i++){
+    const t=toks[i]; let m;
+    if(!t) continue;
+    if((m=t.match(new RegExp(`^\\+${CHR}$`)))) { items.push({type:"gain",c:m[1]}); continue; }
+    if((m=t.match(new RegExp(`^[–-]${CHR}$`)))) { items.push({type:"loss",c:m[1]}); continue; }
+    if((m=t.match(new RegExp(`^t\\(${CHR};${CHR}\\)\\(${BAND};${BAND}\\)$`)))) { const ba=res(m[1],m[3]), bb=res(m[2],m[4]); if(ba&&bb) items.push({type:"t",a:m[1],b:m[2],ba,bb}); continue; }
+    if((m=t.match(new RegExp(`^der\\(${CHR}\\)t\\(${CHR};${CHR}\\)\\(${BAND};${BAND}\\)$`)))) {
+      const [_,d,x,y,bx,by]=m; if(d!==x&&d!==y){ errors.push(`${t}: der() must name one of the translocated chromosomes`); continue; }
+      const other = d===x?y:x, bd=res(d, d===x?bx:by), bo=res(other, d===x?by:bx); if(bd&&bo) items.push({type:"der",a:d,b:other,ba:bd,bb:bo}); continue; }
+    if((m=t.match(new RegExp(`^(del|dup|inv|r)\\(${CHR}\\)\\(${BAND}${BAND}?\\)$`)))) {
+      const [_,ty,c,x,y]=m; if(ty!=="del" && !y){ errors.push(`${t}: ${ty} needs two breakpoints`); continue; }
+      const b1=res(c,x), b2=y?res(c,y):null; if(!b1||(y&&!b2)) continue;
+      const it={type:ty,c,b1,b2}; if(b2 && b2.mid<b1.mid){ if(ty==="dup"){ errors.push(`${t}: inverted duplications are not supported`); continue; } it.b1=b2; it.b2=b1; }
+      items.push(it); continue; }
+    if((m=t.match(new RegExp(`^i\\(${CHR}\\)\\(([pq])10\\)$`)))) { items.push({type:"i",c:m[1],arm:m[2]}); continue; }
+    if((m=t.match(new RegExp(`^add\\(${CHR}\\)\\(${BAND}\\)$`)))) { const b1=res(m[1],m[2]); if(b1) items.push({type:"add",c:m[1],b1}); continue; }
+    errors.push(`"${t}" is not supported here`);
+  }
+  if(errors.length) return {error:errors.join("; ")};
+  // Rebuild the sex complement: letters in the string plus abnormal X/Y written inside abnormalities
+  let nX=(sexStr.match(/X/g)||[]).length, nY=(sexStr.match(/Y/g)||[]).length;
+  for(const it of items){ if(it.type==="gain"||it.type==="loss") continue; for(const ch of involved(it)){ if(ch==="X") nX++; if(ch==="Y") nY++; } }
+  const sex = nY>0 ? "XY" : "XX";
+  const baseX = sex==="XY"?1:2, baseY = sex==="XY"?1:0;
+  for(let k=0;k<nX-baseX;k++) items.unshift({type:"gain",c:"X"});
+  for(let k=0;k<baseX-nX;k++) items.unshift({type:"loss",c:"X"});
+  for(let k=0;k<nY-baseY;k++) items.unshift({type:"gain",c:"Y"});
+  const expected=46+items.filter(x=>x.type==="gain").length-items.filter(x=>x.type==="loss").length;
+  return {items,sex,count,expected};
+}
+
+// ================= state =================
+const state={sex:"XY",items:[],level:"550",band:"R",view:"idio",seed:1,
+  tool:"t", pick:["9","22"], cuts:{}, drag:null};
+const TOOLS=[
+  {id:"t",   name:"Translocation", hint:"t(A;B)", chroms:2, cuts:[1,1]},
+  {id:"der", name:"Unbalanced product", hint:"der(A)t(A;B)", chroms:2, cuts:[1,1]},
+  {id:"del", name:"Deletion", hint:"del · 1 or 2 cuts", chroms:1, cuts:[2], min:[1]},
+  {id:"dup", name:"Duplication", hint:"dup", chroms:1, cuts:[2]},
+  {id:"inv", name:"Inversion", hint:"inv", chroms:1, cuts:[2]},
+  {id:"i",   name:"Isochromosome", hint:"i · click an arm", chroms:1, cuts:[1]},
+  {id:"r",   name:"Ring", hint:"r", chroms:1, cuts:[2]},
+  {id:"add", name:"Unknown material", hint:"add", chroms:1, cuts:[1]},
+  {id:"gain",name:"Extra copy", hint:"+N", chroms:1, cuts:[0]},
+  {id:"loss",name:"Missing copy", hint:"–N", chroms:1, cuts:[0]},
+];
+const PRESETS=[
+  ["CML","46,XY,t(9;22)(q34;q11.2)"],["APL","46,XX,t(15;17)(q24;q21)"],["AML","46,XY,t(8;21)(q22;q22)"],
+  ["AML","46,XX,inv(16)(p13.1q22)"],["Mantle cell","46,XY,t(11;14)(q13;q32)"],["Follicular","46,XX,t(14;18)(q32;q21)"],
+  ["Burkitt","46,XY,t(8;14)(q24;q32)"],["MDS","46,XX,del(5)(q13q33)"],["","46,XY,i(17)(q10)"],
+  ["Down","47,XX,+21"],["Turner","45,X"],["Klinefelter","47,XXY"],["Ring","46,XX,r(20)(p13q13.3)"],
+  ["Unbalanced","46,XY,der(22)t(9;22)(q34;q11.2)"],["","46,XX,dup(1)(q22q25)"],["","46,XY,add(12)(q13)"],
+];
+
+// ================= idiogram drawing (pieces) =================
+const STAIN_R={gneg:"var(--ink)",gpos25:"var(--r25)",gpos50:"var(--r50)",gpos75:"var(--r75)",gpos100:"var(--paper)",acen:"var(--acen)",gvar:"url(#hatch)",stalk:"var(--stalk)",unknown:"url(#hatchU)"};
+const STAIN_G={gneg:"var(--paper)",gpos25:"var(--g25)",gpos50:"var(--g50)",gpos75:"var(--g75)",gpos100:"var(--ink)",acen:"var(--acen)",gvar:"url(#hatch)",stalk:"var(--stalk)",unknown:"url(#hatchU)"};
+const SRC_COL=["var(--turq)","var(--orange)","var(--green)","var(--muted)"];
+function piecesOf(segs,lv){
+  const out=[]; let segI=0;
+  for(const sg of segs){
+    if(sg.c==="?"){ const scale=DATA["1"][lv].at(-1)[2]/Lbp("1"); out.push({name:"?",st:"unknown",len:sg.len*scale,c:"?",seg:segI++}); continue; }
+    const lo=Math.min(sg.s,sg.e), hi=Math.max(sg.s,sg.e), part=[];
+    for(const b of DATA[sg.c][lv]){
+      if(b[4]<lo||b[3]>hi) continue;
+      const a=Math.max(lo,b[3]), z=Math.min(hi,b[4]), f=v=>b[1]+(v-b[3])/Math.max(1,b[4]-b[3])*(b[2]-b[1]);
+      const len=f(z)-f(a); if(len>0.01) part.push({name:b[0],st:b[5],len,c:sg.c,seg:segI});
+    }
+    if(sg.s>sg.e) part.reverse();
+    out.push(...part); segI++;
+  }
+  return out;
+}
+function outlinePath(pieces,x,w,top,scale){
+  let pos=0; const P=pieces.map(p=>{ const r={...p,y0:pos,y1:pos+p.len}; pos+=p.len; return r; });
+  const total=pos, Y=v=>top+v*scale, M=x+w/2, pinch=w*0.28, stalkW=w*0.42;
+  const ac=P.filter(p=>p.st==="acen"); const cm = ac.length ? (ac[0].y0+ac.at(-1).y1)/2 : null;
+  const pts=[];
+  for(const b of P){
+    if(b.st==="acen" && cm!==null){ const hw=y=>{ const d=Math.abs(y-cm)/Math.max(1,(ac.at(-1).y1-ac[0].y0)/2); return pinch/2+(w/2-pinch/2)*Math.min(1,d); }; pts.push([b.y0,hw(b.y0)],[b.y1,hw(b.y1)]); if(b.y0<cm&&b.y1>cm) pts.splice(pts.length-1,0,[cm,pinch/2]); }
+    else if(b.st==="stalk") pts.push([b.y0,stalkW/2],[b.y1,stalkW/2]);
+    else pts.push([b.y0,w/2],[b.y1,w/2]);
+  }
+  const r=Math.min(w/2,(P[0].y1-P[0].y0)*scale,9), rb=Math.min(w/2,(P.at(-1).y1-P.at(-1).y0)*scale,9);
+  const hT=pts[0][1], hB=pts.at(-1)[1], cl=y=>Math.min(Math.max(Y(y),Y(0)+r),Y(total)-rb);
+  let d=`M${M-hT},${Y(0)+r} Q${M-hT},${Y(0)} ${M},${Y(0)} Q${M+hT},${Y(0)} ${M+hT},${Y(0)+r}`;
+  for(const [y,hw] of pts) d+=` L${M+hw},${cl(y)}`;
+  d+=` L${M+hB},${Y(total)-rb} Q${M+hB},${Y(total)} ${M},${Y(total)} Q${M-hB},${Y(total)} ${M-hB},${Y(total)-rb}`;
+  for(let i=pts.length-1;i>=0;i--){ const [y,hw]=pts[i]; d+=` L${M-hw},${cl(y)}`; }
+  return {d:d+" Z",P,total};
+}
+let uid=0;
+function addDefs(svg){
+  const defs=el("defs",{},svg);
+  const h=el("pattern",{id:"hatch",width:5,height:5,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+  el("rect",{width:5,height:5,fill:"var(--paper)"},h); el("rect",{width:2,height:5,fill:"var(--gvar)"},h);
+  const u=el("pattern",{id:"hatchU",width:6,height:6,patternUnits:"userSpaceOnUse",patternTransform:"rotate(-45)"},defs);
+  el("rect",{width:6,height:6,fill:"var(--surface)"},u); el("rect",{width:2.5,height:6,fill:"var(--muted)"},u);
+  return defs;
+}
+function drawChromo(svg,pieces,x,top,scale,w,opt={}){
+  const fill = state.band==="R"?STAIN_R:STAIN_G;
+  const {d,P,total}=outlinePath(pieces,x,w,top,scale);
+  const id="cl"+(uid++); el("path",{d},el("clipPath",{id},el("defs",{},svg)));
+  const g=el("g",{"clip-path":`url(#${id})`},svg);
+  for(const b of P){ const r=el("rect",{x,y:top+b.y0*scale,width:w,height:Math.max(0.6,(b.y1-b.y0)*scale),fill:fill[b.st]||"var(--paper)"},g); el("title",{},r).textContent=b.c==="?"?"material of unknown origin":`${b.c}${b.name}`; if(opt.onBand) opt.onBand(r,b); }
+  el("path",{d,fill:"none",stroke:"var(--outline)","stroke-width":1.2,"stroke-linejoin":"round"},svg);
+  if(opt.sources){ // strip showing which chromosome each part comes from
+    const cols={}; let k=0; for(const b of P){ if(!(b.c in cols)) cols[b.c]= b.c==="?"?SRC_COL[3]:SRC_COL[Math.min(k++,2)]; }
+    for(const b of P) el("rect",{x:x-7,y:top+b.y0*scale,width:3.5,height:Math.max(0.6,(b.y1-b.y0)*scale),fill:cols[b.c],rx:1},svg);
+    let prev=null; for(const b of P){ if(prev!==null && b.seg!==prev){ const yy=top+b.y0*scale; el("line",{x1:x-10,x2:x+w+4,y1:yy,y2:yy,stroke:"var(--orange)","stroke-width":2,"stroke-dasharray":"3 2"},svg); } prev=b.seg; }
+  }
+  if(opt.ring){ const y0=top, y1=top+total*scale; el("path",{d:`M${x+w+3},${y0+6} C${x+w+26},${y0+6} ${x+w+26},${y1-6} ${x+w+3},${y1-6}`,fill:"none",stroke:"var(--orange)","stroke-width":1.8,"stroke-dasharray":"4 3","marker-end":""},svg); }
+  return {P,total};
+}
+function spread(items,gap,minY,maxY){
+  items.sort((a,b)=>a.y-b.y);
+  for(let i=0;i<items.length;i++) items[i].ly=Math.max(items[i].y,i?items[i-1].ly+gap:minY);
+  for(let i=items.length-1;i>=0;i--){ const lim=i<items.length-1?items[i+1].ly-gap:maxY; if(items[i].ly>lim) items[i].ly=lim; }
+  return items;
+}
+
+// ================= bench (hand editing) =================
+const bench=document.getElementById("bench");
+const toolDef=()=>TOOLS.find(t=>t.id===state.tool);
+function benchChroms(){ const t=toolDef(); return t.chroms===2 ? [state.pick[0],state.pick[1]] : [state.pick[0]]; }
+function renderBench(){
+  bench.innerHTML=""; addDefs(bench);
+  const t=toolDef(), chs=benchChroms(), lv=state.level;
+  const pend=pendingItem(), ders=(pend && !validate(pend)) ? chromosomesFor(pend) : [];
+  const derPcs=ders.map(d=>piecesOf(d.segs,lv));
+  const wrapW=bench.parentElement.clientWidth, H=Math.max(360,Math.min(560,wrapW*0.9));
+  // one scale for the chromosomes being cut and the preview, so a longer derivative still fits
+  const maxU=Math.max(...chs.map(c=>DATA[c][lv].at(-1)[2]), ...derPcs.map(p=>p.reduce((a,b)=>a+b.len,0))), scale=(H-40)/maxU;
+  const colW=170, W=Math.max(wrapW-2, 78+chs.length*colW+ders.length*64+20);
+  bench.setAttribute("width",W); bench.setAttribute("height",H); bench.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  chs.forEach((c,ci)=>{
+    const x=78+ci*colW, top=24, w=30;
+    const txt=el("text",{x:x+w/2,y:14,"text-anchor":"middle",class:"blab",fill:"var(--fg)","font-size":13,"font-weight":600,"font-family":"var(--f-mono)"},bench); txt.textContent=`chr ${c}`;
+    const bands=DATA[c][lv].map(b=>({name:b[0],st:b[5],len:b[2]-b[1],c,seg:0,bp0:b[3],bp1:b[4]}));
+    const {P}=drawChromo(bench,bands,x,top,scale,w,{onBand:(r,b)=>{ r.style.cursor= t.cuts[ci]?"crosshair":"default"; r.dataset.c=c; r.dataset.ci=ci; r.dataset.band=b.name; }});
+    // band labels
+    const items=spread(P.map(b=>({b,y:top+(b.y0+b.y1)/2*scale})),10.5,top+3,top+P.at(-1).y1*scale-2);
+    for(const it of items){ el("path",{d:`M${x+w+2},${it.y} L${x+w+8},${it.y} L${x+w+14},${it.ly}`,fill:"none",stroke:"var(--line)"},bench);
+      const tt=el("text",{x:x+w+16,y:it.ly+3.5,"font-size":10,"font-family":"var(--f-mono)",fill:"var(--muted)"},bench); tt.textContent=it.b.name; }
+    // breakpoint markers
+    for(const [k,cut] of (state.cuts[ci]||[]).entries()){
+      // a breakpoint named at a coarser level (e.g. 9q34 while showing 550 bands) sits in the middle of its sub-bands
+      const rb=resolveBand(c,cut.name); if(!rb) continue;
+      const bb=DATA[c][lv].find(b=>b[0]===cut.name);
+      const u = bb ? (bb[1]+bb[2])/2 : (()=>{ const kids=DATA[c][lv].filter(b=>b[4]>=rb.s && b[3]<=rb.e); return (kids[0][1]+kids.at(-1)[2])/2; })();
+      const y=top+u*scale;
+      const g=el("g",{class:"marker",style:"cursor:ns-resize"},bench); g.dataset.ci=ci; g.dataset.k=k;
+      el("line",{x1:x-14,x2:x+w+8,y1:y,y2:y,stroke:"var(--orange)","stroke-width":2.5},g);
+      const tagW=Math.max(44,(c.length+cut.name.length)*7.2+12);
+      el("rect",{x:x-16-tagW,y:y-10,width:tagW,height:20,rx:6,fill:"var(--orange)"},g);
+      const tl=el("text",{x:x-16-tagW/2,y:y+4,"text-anchor":"middle","font-size":11,"font-weight":600,"font-family":"var(--f-mono)",fill:"var(--on-orange)"},g); tl.textContent=`${c}${cut.name}`;
+      el("rect",{x:x-18-tagW,y:y-12,width:w+tagW+30,height:24,fill:"transparent"},g);
+    }
+  });
+  // live preview of the pending abnormality
+  if(ders.length){
+    let x=78+chs.length*colW-20;
+    const lab=el("text",{x,y:14,"font-size":12,"font-family":"var(--f-mono)",fill:"var(--turq-ink)","font-weight":600},bench); lab.textContent="Result";
+    ders.forEach((d,di)=>{ const pcs=derPcs[di]; drawChromo(bench,pcs,x+10,24,scale,24,{sources:true,ring:d.ring});
+      const t2=el("text",{x:x+22,y:H-4,"text-anchor":"middle","font-size":11,"font-family":"var(--f-mono)",fill:"var(--fg)"},bench); t2.textContent=d.label; x+=64; });
+  }
+  updateInstr();
+}
+function cutsNeeded(){ const t=toolDef(); return t.cuts; }
+function pendingItem(){
+  const t=toolDef(), chs=benchChroms(), C=state.cuts; const lv=state.level;
+  const b=(ci,k)=>{ const cut=(C[ci]||[])[k]; if(!cut) return null; return resolveBand(chs[ci],cut.name); };
+  if(t.id==="gain"||t.id==="loss") return {type:t.id,c:chs[0]};
+  if(t.id==="t"||t.id==="der"){ const a=b(0,0), bb=b(1,0); return a&&bb ? {type:t.id,a:chs[0],b:chs[1],ba:a,bb} : null; }
+  if(t.id==="i"){ const cut=(C[0]||[])[0]; return cut ? {type:"i",c:chs[0],arm:cut.arm} : null; }
+  const b1=b(0,0), b2=b(0,1);
+  if(t.id==="del"||t.id==="add"){ if(!b1) return null; if(t.id==="add") return {type:"add",c:chs[0],b1};
+    if(!b2) return {type:"del",c:chs[0],b1}; const [x,y]=b1.mid<=b2.mid?[b1,b2]:[b2,b1]; return {type:"del",c:chs[0],b1:x,b2:y}; }
+  if(!b1||!b2) return null; const [x,y]=b1.mid<=b2.mid?[b1,b2]:[b2,b1];
+  return {type:t.id,c:chs[0],b1:x,b2:y};
+}
+function updateInstr(){
+  const t=toolDef(), chs=benchChroms(), it=pendingItem(), instr=document.getElementById("instr");
+  const have=chs.map((c,i)=>(state.cuts[i]||[]).length);
+  let msg="";
+  if(t.id==="gain"||t.id==="loss") msg=`Adds ${t.id==="gain"?"an extra":"a missing"} chromosome ${chs[0]}. No breakpoints needed.`;
+  else if(t.id==="i") msg=`Click anywhere on the <b>p</b> or <b>q</b> arm of chr ${chs[0]}: the isochromosome is made of two copies of that arm.`;
+  else { const need=t.cuts.map((n,i)=>n-(have[i]||0)).reduce((a,b)=>a+b,0);
+    msg = need>0 ? `Click a band to place a breakpoint${t.chroms===2?" on each chromosome":""}. ${need} to go${t.id==="del"&&have[0]===1?" (or keep one for a terminal deletion)":""}. Drag an orange marker up or down to move it.`
+                 : `Drag the orange markers to adjust. The result and the ISCN update as you move them.`; }
+  instr.innerHTML=msg;
+  const err= it ? validate(it) : null;
+  document.getElementById("pending").innerHTML = it ? (err?`<span style="color:var(--orange)">${err}</span>`:shortOf(it)) : "";
+  document.getElementById("commit").disabled = !it || !!err;
+}
+function benchPoint(ev){ const r=bench.getBoundingClientRect(); return {x:(ev.clientX-r.left)*(bench.viewBox.baseVal.width/r.width), y:(ev.clientY-r.top)*(bench.viewBox.baseVal.height/r.height)}; }
+function bandUnder(ci,y){
+  const chs=benchChroms(), c=chs[ci], lv=state.level, H=bench.viewBox.baseVal.height;
+  const pend=pendingItem(), ders=(pend&&!validate(pend))?chromosomesFor(pend):[];
+  const maxU=Math.max(...chs.map(cc=>DATA[cc][lv].at(-1)[2]), ...ders.map(d=>piecesOf(d.segs,lv).reduce((a,b)=>a+b.len,0))), scale=(H-40)/maxU, u=(y-24)/scale;
+  const bs=DATA[c][lv]; return bs.find(b=>u>=b[1]&&u<b[2]) || (u<0?bs[0]:bs.at(-1));
+}
+function placeCut(ci,band,replaceK){
+  const t=toolDef(), c=benchChroms()[ci];
+  if(!t.cuts[ci]) return;
+  if(band[5]==="acen" && t.id!=="i") return; // ISCN centromere breaks are p10/q10; not placed by clicking here
+  const list=state.cuts[ci]||(state.cuts[ci]=[]);
+  const cut={name:band[0], arm: band[0][0]};
+  if(t.id==="i"){ state.cuts[ci]=[cut]; return; }
+  if(replaceK!==undefined){ list[replaceK]=cut; return; }
+  if(list.length<t.cuts[ci]) list.push(cut);
+  else { // move the nearest marker
+    const mid=(band[3]+band[4])/2; let best=0,bd=Infinity; list.forEach((cc,k)=>{ const r=resolveBand(c,cc.name); const dd=Math.abs(r.mid-mid); if(dd<bd){bd=dd;best=k;} }); list[best]=cut; }
+}
+bench.addEventListener("pointerdown",ev=>{
+  const mk=ev.target.closest(".marker");
+  if(mk){ state.drag={ci:+mk.dataset.ci,k:+mk.dataset.k}; bench.setPointerCapture(ev.pointerId); ev.preventDefault(); return; }
+  const r=ev.target.closest("rect[data-c]"); if(!r) return;
+  const ci=+r.dataset.ci, band=DATA[r.dataset.c][state.level].find(b=>b[0]===r.dataset.band);
+  placeCut(ci,band); renderBench();
+});
+bench.addEventListener("pointermove",ev=>{
+  if(!state.drag) return;
+  const p=benchPoint(ev), band=bandUnder(state.drag.ci,p.y); const cur=state.cuts[state.drag.ci][state.drag.k];
+  if(band && band[5]!=="acen" && band[0]!==cur.name){ placeCut(state.drag.ci,band,state.drag.k); renderBench(); }
+});
+const endDrag=()=>{ state.drag=null; };
+bench.addEventListener("pointerup",endDrag); bench.addEventListener("pointercancel",endDrag);
+
+// ================= results =================
+function currentChromosomes(){
+  // copies per chromosome, then replace copies with derivatives
+  const copies={}; for(const c of ORDER) copies[c]= c==="X" ? (state.sex==="XX"?2:1) : c==="Y" ? (state.sex==="XY"?1:0) : 2;
+  const derived={}; const touched=new Set();
+  for(const it of state.items){
+    if(it.type==="gain"){ copies[it.c]++; touched.add(it.c); continue; }
+    if(it.type==="loss"){ copies[it.c]=Math.max(0,copies[it.c]-1); touched.add(it.c); continue; }
+    for(const d of chromosomesFor(it)){ (derived[d.c]=derived[d.c]||[]).push(d); }
+    for(const c of involved(it)){ copies[c]=Math.max(0,copies[c]-1); touched.add(c); }
+  }
+  return ORDER.filter(c=>touched.has(c)).map(c=>({c,normal:copies[c],ders:derived[c]||[]}));
+}
+function renderResult(){
+  document.getElementById("karyo").textContent=karyotypeString();
+  const items=document.getElementById("items"); items.innerHTML="";
+  state.items.forEach((it,i)=>{ const s=document.createElement("span"); s.className="item"; s.innerHTML=`${shortOf(it)}<button aria-label="Remove ${shortOf(it)}" title="Remove">×</button>`;
+    s.querySelector("button").addEventListener("click",()=>{ state.items.splice(i,1); renderResult(); syncInput(); }); items.appendChild(s); });
+  const det=document.getElementById("detail"); det.innerHTML="";
+  const lines=state.items.flatMap(detailedOf);
+  if(!lines.length) det.innerHTML='<div><span>Normal karyotype. Add an abnormality to see its band composition.</span></div>';
+  for(const [lab,txt] of lines){ const d=document.createElement("div"); d.innerHTML=`<span>${lab}</span> ${txt}`; det.appendChild(d); }
+  const g=genesAtBreaks(); document.getElementById("genes").innerHTML = g.length ? "Landmark genes in the breakpoint bands: "+g.join("; ")+"." : "";
+  drawResult();
+}
+function drawResult(){
+  const groups=currentChromosomes(), svg=document.getElementById("resultSvg"), cv=document.getElementById("resultCv"), wrap=document.getElementById("resultWrap");
+  const idio=state.view==="idio";
+  svg.toggleAttribute("hidden",!idio); cv.hidden=idio; document.getElementById("respread").hidden=idio; document.getElementById("bandSeg").hidden=!idio;
+  document.getElementById("legendLine").innerHTML = idio ? '<span><i style="background:var(--turq)"></i>first chromosome</span><span><i style="background:var(--orange)"></i>second chromosome</span><span><i style="background:transparent;border-top:2px dashed var(--orange);border-radius:0;height:0;width:14px"></i>junction</span><span><i class="sw-unknown"></i>material of unknown origin</span>' : "";
+  if(!groups.length){ svg.innerHTML=""; svg.setAttribute("width",10); svg.setAttribute("height",10);
+    if(!wrap.querySelector(".empty")){ const p=document.createElement("p"); p.className="empty"; p.textContent="No abnormality yet. Type a karyotype, pick an example, or build one by hand."; wrap.prepend(p); } cv.hidden=true; return; }
+  wrap.querySelector(".empty")?.remove();
+  if(idio) drawIdioResult(svg,groups,wrap.clientWidth); else drawScopeResult(cv,groups,wrap.clientWidth);
+}
+function drawIdioResult(svg,groups,wrapW){
+  svg.innerHTML=""; addDefs(svg); const lv=state.level;
+  const slots=[]; for(const g of groups){ for(let k=0;k<g.normal;k++) slots.push({label:`${g.c}`,segs:[SEG(g.c,0,Lbp(g.c))],normal:true,c:g.c});
+    for(const d of g.ders) slots.push({label:d.label,segs:d.segs,ring:d.ring,c:g.c}); slots.push(null); }
+  slots.pop();
+  const pcs=slots.map(s=>s?piecesOf(s.segs,lv):null);
+  const maxU=Math.max(...pcs.filter(Boolean).map(p=>p.reduce((a,b)=>a+b.len,0)));
+  const H=Math.max(300,Math.min(560,wrapW*0.55)), scale=(H-50)/maxU, w=26, colW=62, gapW=34;
+  const W=Math.max(wrapW-2, slots.reduce((a,s)=>a+(s?colW:gapW),0)+40);
+  svg.setAttribute("width",W); svg.setAttribute("height",H); svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  let x=24;
+  slots.forEach((s,i)=>{ if(!s){ x+=gapW; return; }
+    drawChromo(svg,pcs[i],x+10,14,scale,w,{sources:!s.normal,ring:s.ring});
+    const t=el("text",{x:x+10+w/2,y:H-10,"text-anchor":"middle","font-size":11,"font-family":"var(--f-mono)",fill:s.normal?"var(--muted)":"var(--fg)","font-weight":s.normal?400:600},svg); t.textContent=s.label;
+    x+=colW; });
+}
+
+// ---------- microscope (simulator engine, generalised to arbitrary band pieces) ----------
+function rng(seed){ let a=seed>>>0; return ()=>{ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function noise1(r,n=64){ const v=Array.from({length:n+1},()=>r()*2-1); return x=>{ x=Math.max(0,Math.min(0.9999,x))*n; const i=Math.floor(x),f=x-i,s=f*f*(3-2*f); return v[i]*(1-s)+v[i+1]*s; }; }
+function noise2(r,size=96){ const g=new Float32Array(size*size); for(let i=0;i<g.length;i++) g[i]=r();
+  return (x,y)=>{ const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,m=v=>((v%size)+size)%size;
+    const a=g[m(yi)*size+m(xi)],b=g[m(yi)*size+m(xi+1)],c=g[m(yi+1)*size+m(xi)],d=g[m(yi+1)*size+m(xi+1)],sx=xf*xf*(3-2*xf),sy=yf*yf*(3-2*yf);
+    return (a*(1-sx)+b*sx)*(1-sy)+(c*(1-sx)+d*sx)*sy; }; }
+function blur1(src,s){ if(s<0.3) return Float32Array.from(src); const R=Math.ceil(s*3),k=[];let t=0; for(let i=-R;i<=R;i++){const w=Math.exp(-i*i/(2*s*s));k.push(w);t+=w;}
+  const o=new Float32Array(src.length),n=src.length; for(let i=0;i<n;i++){let a=0;for(let j=-R;j<=R;j++){const q=i+j<0?0:i+j>=n?n-1:i+j;a+=src[q]*k[j+R];}o[i]=a/t;} return o; }
+function blur2(buf,w,h,s){ if(s<0.3) return; const R=Math.ceil(s*2.5),k=new Float32Array(R*2+1);let t=0; for(let i=-R;i<=R;i++){k[i+R]=Math.exp(-i*i/(2*s*s));t+=k[i+R];} for(let i=0;i<k.length;i++)k[i]/=t;
+  const tmp=new Float32Array(w*h); for(let y=0;y<h;y++){const o=y*w;for(let x=0;x<w;x++){let a=0;for(let j=-R;j<=R;j++){const q=x+j<0?0:x+j>=w?w-1:x+j;a+=buf[o+q]*k[j+R];}tmp[o+x]=a;}}
+  for(let x=0;x<w;x++)for(let y=0;y<h;y++){let a=0;for(let j=-R;j<=R;j++){const q=y+j<0?0:y+j>=h?h-1:y+j;a+=tmp[q*w+x]*k[j+R];}buf[y*w+x]=a;} }
+const SV={gneg:1,gpos25:0.66,gpos50:0.42,gpos75:0.24,gpos100:0.08,acen:0.5,stalk:0.22,gvar:0.12,unknown:0.55};
+function profileOf(pieces,r,sigma){
+  const total=Math.max(1,Math.round(pieces.reduce((a,p)=>a+p.len,0))), prof=new Float32Array(total), stalk=new Float32Array(total);
+  let pos=0; const n=pieces.length;
+  pieces.forEach((p,i)=>{ let v=SV[p.st]??0.5; if(p.st==="gneg") v*=0.88+r()*0.24; if(p.st==="unknown") v=0.35+0.4*((Math.floor(pos/60))%2);
+    for(let x=Math.floor(pos);x<Math.min(total,Math.ceil(pos+p.len));x++){ prof[x]=v; if(p.st==="stalk") stalk[x]=1; } pos+=p.len; });
+  const ac=[]; pos=0; for(const p of pieces){ if(p.st==="acen") ac.push([pos,pos+p.len]); pos+=p.len; }
+  const cen = ac.length ? (ac[0][0]+ac.at(-1)[1])/2 : total/2;
+  return {prof:blur1(prof,sigma),stalk:blur1(stalk,Math.max(20,sigma*0.6)),total,tc:cen/total};
+}
+function drawScopeResult(cv,groups,wrapW){
+  const lv="850";
+  const slots=[]; for(const g of groups){ for(let k=0;k<g.normal;k++) slots.push({label:g.c,segs:[SEG(g.c,0,Lbp(g.c))]});
+    for(const d of g.ders) slots.push({label:d.label,segs:d.segs,ring:d.ring}); slots.push(null); } slots.pop();
+  const pcs=slots.map(s=>s?piecesOf(s.segs,lv):null);
+  const lens=pcs.map(p=>p?p.reduce((a,b)=>a+b.len,0):0), maxU=Math.max(...lens);
+  const cssW=Math.max(wrapW,slots.length*58), cssH=Math.round(Math.max(320,Math.min(560,wrapW*0.55)));
+  const dpr=Math.min(2,window.devicePixelRatio||1), W=Math.round(cssW*dpr), H=Math.round(cssH*dpr);
+  cv.width=W; cv.height=H; cv.style.width=cssW+"px"; cv.style.height=cssH+"px";
+  const r=rng(state.seed*7919+5), occ=new Float32Array(W*H), stn=new Float32Array(W*H);
+  const k=Math.min((H-50*dpr)/maxU,(H-50*dpr)/7550), rad=(15100*k)/40, sigma=16000/450;   // small chromosomes are enlarged at most 2x relative to chromosome 1
+  const unit=W/(slots.reduce((a,s)=>a+(s?1:0.6),0)+0.4); let x=unit*0.7; const labels=[];
+  slots.forEach((s,i)=>{ if(!s){ x+=unit*0.6; return; }
+    const P=profileOf(pcs[i],r,sigma), len=lens[i]*k;
+    const pts=[]; const n1=noise1(r,6), th0=(r()-0.5)*0.12;
+    if(s.ring){ const R=len/(2*Math.PI); for(let j=0;j<=Math.ceil(len);j++){ const a=j/Math.ceil(len)*2*Math.PI; pts.push({x:R*Math.sin(a),y:-R*Math.cos(a)+R,th:a+Math.PI/2*0,t:j/Math.ceil(len),ring:true,a}); } }
+    else { let px=0,py=0; const steps=Math.max(8,Math.ceil(len)); for(let j=0;j<=steps;j++){ const t=j/steps, th=th0+0.18*n1(t); pts.push({x:px,y:py,th,t}); px+=Math.sin(th)*len/steps; py+=Math.cos(th)*len/steps; } }
+    const top=18*dpr, ox=x, oy=top, wN=noise1(r,40);
+    for(let c=0;c<2;c++){ const side=c?1:-1, jit=noise1(r,30);
+      for(const p of pts){ const t=p.t, dc=(t-P.tc)/0.022, cenF=s.ring?0:Math.exp(-dc*dc), endF=s.ring?1:Math.min(1,Math.min(t,1-t)/0.012);
+        const st=P.stalk[Math.min(P.total-1,Math.floor(t*P.total))];
+        const sepD=rad*0.35*(1-0.85*cenF)*(1-0.8*st)*(0.6+0.4*endF), rr=rad*(1-0.42*cenF)*(1-0.68*st)*(1+0.07*wN(t))*(0.82+0.18*endF);
+        const nx = p.ring ? Math.sin(p.a) : Math.cos(p.th), ny = p.ring ? -Math.cos(p.a) : -Math.sin(p.th);
+        const px=ox+p.x+nx*sepD*side, py=oy+p.y+ny*sepD*side, v=P.prof[Math.min(P.total-1,Math.floor(t*P.total))]*(0.95+0.1*jit(t));
+        const x0=Math.max(0,Math.floor(px-rr)),x1=Math.min(W-1,Math.ceil(px+rr)),y0=Math.max(0,Math.floor(py-rr)),y1=Math.min(H-1,Math.ceil(py+rr));
+        for(let yy=y0;yy<=y1;yy++){ const dy=yy-py; for(let xx=x0;xx<=x1;xx++){ const dx=xx-px,u2=(dx*dx+dy*dy)/(rr*rr); if(u2>=1) continue; const o=Math.sqrt(1-u2),q=yy*W+xx; if(o>occ[q]){occ[q]=o;stn[q]=v;} } } } }
+    labels.push({t:s.label,x:x,bold:!!s.segs&&s.segs.length>1||s.ring||(s.label.includes("("))});
+    x+=unit; });
+  const A=new Float32Array(W*H), tex=noise2(r,96), gs=Math.max(2,rad*0.55);
+  for(let q=0;q<W*H;q++){ if(!occ[q]) continue; const xx=q%W, yy=(q/W)|0; const g=0.72+0.5*tex(xx/gs,yy/gs)+0.15*tex(xx/(gs*0.4)+50,yy/(gs*0.4)); A[q]=Math.pow(occ[q],0.8)*(0.16+0.84*stn[q])*g*1.25; }
+  blur2(A,W,H,1.4*dpr);
+  const ctx=cv.getContext("2d"), img=ctx.createImageData(W,H), D=img.data;
+  for(let q=0;q<W*H;q++){ const a=A[q], j=q*4, gr=(r()-0.5)*7; const v=226*Math.exp(-a*1.55)+gr; D[j]=D[j+1]=D[j+2]=v; D[j+3]=255; }
+  ctx.putImageData(img,0,0);
+  ctx.font=`${11*dpr}px "Geist Mono", ui-monospace, monospace`; ctx.textAlign="center"; ctx.fillStyle="#2b2f33";
+  for(const l of labels){ ctx.font=`${l.bold?600:400} ${11*dpr}px "Geist Mono", ui-monospace, monospace`; ctx.fillText(l.t,l.x,H-12*dpr); }
+}
+
+// ================= wiring =================
+function syncInput(){ document.getElementById("iscnIn").value=karyotypeString(); }
+function applyString(str){
+  const msg=document.getElementById("iscnMsg"); const p=parseKaryotype(str);
+  if(p.error){ msg.className="msg err"; msg.textContent=p.error; return false; }
+  for(const it of p.items){ const e=validate({...it}); if(e && !e.startsWith("Switch")){ msg.className="msg err"; msg.textContent=`${shortOf(it)}: ${e}`; return false; } }
+  state.sex=p.sex; state.items=p.items; syncSeg("sex",state.sex);
+  msg.className="msg ok"; msg.textContent = p.count!==p.expected ? `Shown. Note: the count ${p.count} does not match the abnormalities listed, which give ${p.expected}.` : "";
+  renderResult(); return true;
+}
+function syncSeg(attr,val){ document.querySelectorAll(`[data-${attr}]`).forEach(b=>b.setAttribute("aria-pressed",String(b.dataset[attr]===val))); }
+document.getElementById("iscnGo").addEventListener("click",()=>applyString(document.getElementById("iscnIn").value));
+document.getElementById("iscnIn").addEventListener("keydown",e=>{ if(e.key==="Enter") applyString(e.target.value); });
+const pr=document.getElementById("presets");
+for(const [lab,str] of PRESETS){ const b=document.createElement("button"); b.className="preset"; b.innerHTML=(lab?lab+" · ":"")+`<b>${str.replace(/^\d+,[XY]*,?/,"") || str}</b>`; b.title=str;
+  b.addEventListener("click",()=>{ document.getElementById("iscnIn").value=str; applyString(str); }); pr.appendChild(b); }
+const tools=document.getElementById("tools");
+for(const t of TOOLS){ const b=document.createElement("button"); b.className="tool"; b.dataset.tool=t.id; b.setAttribute("aria-pressed",String(t.id===state.tool)); b.innerHTML=`${t.name}<small>${t.hint}</small>`;
+  b.addEventListener("click",()=>{ state.tool=t.id; state.cuts={}; tools.querySelectorAll(".tool").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); syncPickers(); renderBench(); }); tools.appendChild(b); }
+const pickA=document.getElementById("pickA"), pickB=document.getElementById("pickB");
+for(const c of ORDER){ pickA.add(new Option(c,c)); pickB.add(new Option(c,c)); }
+function syncPickers(){ pickA.value=state.pick[0]; pickB.value=state.pick[1]; document.getElementById("pickBWrap").hidden = toolDef().chroms!==2; }
+pickA.addEventListener("change",()=>{ state.pick[0]=pickA.value; state.cuts={}; renderBench(); });
+pickB.addEventListener("change",()=>{ state.pick[1]=pickB.value; state.cuts[1]=[]; renderBench(); });
+document.querySelectorAll("[data-lvl]").forEach(b=>b.addEventListener("click",()=>{ state.level=b.dataset.lvl; syncSeg("lvl",state.level);
+  // keep breakpoints by mapping each to the band that contains its midpoint at the new level
+  const chs=benchChroms(); for(const ci in state.cuts) state.cuts[ci]=state.cuts[ci].map(cut=>{ const r=resolveBand(chs[ci],cut.name); const nb=bandAt(chs[ci],state.level,r?r.mid:0); return {name:nb[0],arm:nb[0][0]}; });
+  renderBench(); drawResult(); }));
+document.getElementById("clearCuts").addEventListener("click",()=>{ state.cuts={}; renderBench(); });
+document.getElementById("commit").addEventListener("click",()=>{ const it=pendingItem(); if(!it||validate(it)) return; state.items.push(it); state.cuts={}; renderBench(); renderResult(); syncInput();
+  document.getElementById("iscnMsg").textContent=""; document.getElementById("h-karyo").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"nearest"}); });
+document.querySelectorAll("[data-sex]").forEach(b=>b.addEventListener("click",()=>{ state.sex=b.dataset.sex; if(state.sex==="XX") state.items=state.items.filter(it=>!involved(it).includes("Y")); syncSeg("sex",state.sex); renderResult(); syncInput(); renderBench(); }));
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{ state.view=b.dataset.view; syncSeg("view",state.view); drawResult(); }));
+document.querySelectorAll("[data-band]").forEach(b=>b.addEventListener("click",()=>{ state.band=b.dataset.band; syncSeg("band",state.band); renderBench(); drawResult(); }));
+document.getElementById("respread").addEventListener("click",()=>{ state.seed=Math.floor(Math.random()*9999)+1; drawResult(); });
+document.getElementById("resetAll").addEventListener("click",()=>{ state.items=[]; renderResult(); syncInput(); });
+document.getElementById("copyBtn").addEventListener("click",async e=>{ const t=karyotypeString(); try{ await navigator.clipboard.writeText(t); e.target.textContent="Copied"; }catch(_){ const r=document.createRange(); r.selectNodeContents(document.getElementById("karyo")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); e.target.textContent="Selected"; } setTimeout(()=>e.target.textContent="Copy",1400); });
+let rw=0; new ResizeObserver(()=>{ const w=document.getElementById("resultWrap").clientWidth; if(Math.abs(w-rw)>4){ rw=w; renderBench(); drawResult(); } }).observe(document.getElementById("resultWrap"));
+
+syncPickers();
+applyString(document.getElementById("iscnIn").value);
+// preload the bench with the same translocation so the first view shows how cutting works
+state.cuts={0:[{name:"q34",arm:"q"}],1:[{name:"q11.2",arm:"q"}]};
+if(!DATA["22"]["550"].some(b=>b[0]==="q11.2")) state.cuts[1]=[{name:bandAt("22","550",resolveBand("22","q11.2").mid)[0],arm:"q"}];
+renderBench();
+</script>

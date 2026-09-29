@@ -86,6 +86,7 @@ input[type=range]{accent-color:var(--turq)}
 .notes ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:7px;max-width:92ch;font-size:14px;color:var(--fg)}
 .notes li::marker{color:var(--turq)}
 
+@media (max-width:560px){.tabs svg{display:none}.tabs a{padding:6px 9px}}
 /* ---- page ---- */
 .kg{padding:14px 16px 10px;display:flex;flex-direction:column;gap:8px}
 .kg-head{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
@@ -157,13 +158,14 @@ svg text{font-family:var(--f-mono)}
     <div class="tabs">
       <a href="__IDEO_HREF__"__IDEO_TGT__ aria-current="page"><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
       <a href="__SIM_HREF__"__SIM_TGT__ ><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
+      <a href="__ABN_HREF__"__ABN_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
     </div>
   </div>
 </nav>
 <div class="wrap">
   <header>
     <div class="eyebrow" id="eyebrow">ISCN ideograms · RHG pattern · GRCh38</div>
-    <h1>Human chromosomes in <span id="h1mode">R&#8209;banding</span> at 400, 550 and 850 bands</h1>
+    <h1>Human chromosomes in <span id="h1mode">R&#8209;banding</span> at 400, 550 and ~700 bands</h1>
     <p>R-banding by heat denaturation reverses the G-band pattern: G-pale bands stain dark and G-dark bands stain pale. Band names are the same in both methods. Use the switch to flip every view between R- and G-banding. Pick a chromosome in the karyogram, then hover or tap a band to see the same region at the other resolutions.</p>
     <div class="hero-actions"><a class="btn-scope" href="__SIM_HREF__#karyogram"__SIM_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span>Open the microscope simulator</span></a><span class="hint">See how these chromosomes look on a real RHG slide.</span></div>
   </header>
@@ -175,7 +177,7 @@ svg text{font-family:var(--f-mono)}
         <span class="ctl-label">Level</span>
         <button class="chip kgl" id="kg400" data-lv="400" aria-pressed="true">400</button>
         <button class="chip kgl" id="kg550" data-lv="550" aria-pressed="false">550</button>
-        <button class="chip kgl" id="kg850" data-lv="850" aria-pressed="false">850</button>
+        <button class="chip kgl" id="kg850" data-lv="850" aria-pressed="false" title="GRCh38 idiogram, closest to the ISCN 700-band level">~700</button>
       </div>
     </div>
     <div class="kg-scroll"><div class="kg-rows" id="kg"></div></div>
@@ -193,7 +195,7 @@ svg text{font-family:var(--f-mono)}
       <span class="ctl-label">Levels shown</span>
       <button class="chip lvc" id="lv400" data-lv="400" aria-pressed="true">400</button>
       <button class="chip lvc" id="lv550" data-lv="550" aria-pressed="true">550</button>
-      <button class="chip lvc" id="lv850" data-lv="850" aria-pressed="true">850</button>
+      <button class="chip lvc" id="lv850" data-lv="850" aria-pressed="true" title="GRCh38 idiogram, closest to the ISCN 700-band level">~700</button>
     </div>
     <label class="toggle" id="genesToggle"><input type="checkbox" id="showGenes" checked><span>Landmark genes</span></label>
   </div>
@@ -215,10 +217,12 @@ svg text{font-family:var(--f-mono)}
     <ul>
       <li>Band names, ISCN lengths and G-stain grades come from NCBI's human ideogram data (GRCh38), as packaged in <a href="https://github.com/eweitz/ideogram" target="_blank" rel="noopener">ideogram.js</a>. The R pattern is the reciprocal of that G pattern, which is how ISCN treats R-banded ideograms.</li>
       <li>Grey steps for intermediate bands are an inversion of NCBI's G-stain grades, not measured RHG intensities. Every G-negative band has the same value in the source, so differences in intensity between R-positive bands (including the strongly staining T-bands) are not shown.</li>
-      <li>Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are not inverted. Their appearance in RHG varies between individuals and preparations, so they are drawn with a separate hatch rather than a guessed tone.</li>
+      <li>Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are not inverted. ISCN 2024 (section 2.2.2) describes these regions as variable in size and staining intensity with Q-, G-, R-, C- and T-banding, so they are drawn with a separate hatch rather than a guessed tone.</li>
       <li>At the 550 level the source file leaves gaps in seven places: 7q11.2, 8q11.2, 11p11.1, 12q24.3, 18p11.3, Xp11.2 and Yq11.2. The sub-bands in each were stretched to fill their parent 400-level band, so their relative sizes there are approximate.</li>
       <li>In the karyogram, all chromosomes share one scale in ISCN units. In the detail view each chromosome is drawn to a height that leaves room for its labels, so detail views are not to scale with each other.</li>
-      <li>ISCN also defines 300- and 700-band levels. They are not in this dataset, so they are not drawn. Landmark genes (2 to 6 per chromosome, 74 in all) use Ensembl release 110 GRCh38 gene coordinates, placed by interpolation within their band. They are orientation marks, not precise positions. The IGH mark sits at IGHM, inside the IGH locus.</li>
+      <li><b>The finest level is the GRCh38 idiogram, labelled ~700.</b> ISCN 2024 (section 2.4) states that the GRCh38 idiograms best fit the ISCN 700-band level. GRCh38 is more detailed than ISCN at 6p24 and 9q34.1, and ISCN 850 is more detailed at 1q32, 2p21, 5q13.2, 6p22.3 and 6q21. It was labelled 850 in earlier versions of this page, following NCBI's file names.</li>
+      <li><b>Band names in karyotypes.</b> Sub-bands such as 9q34.12 or 6p24.3 exist only in GRCh38. An ISCN karyotype uses the band level actually resolved, e.g. t(9;22)(q34;q11.2). Gene positions on this page use GRCh38 names.</li>
+      <li>ISCN also defines 300- and 850-band idiograms. They are not in this dataset, so they are not drawn. Landmark genes (2 to 6 per chromosome, 74 in all) use Ensembl release 110 GRCh38 gene coordinates, placed by interpolation within their band. They are orientation marks, not precise positions. The IGH mark sits at IGHM, inside the IGH locus.</li>
     </ul>
   </section>
 </div>
@@ -234,6 +238,7 @@ const GROUPS = [
 ];
 const GENES = __GENES__;
 const TOP = 18, CW = 30;
+const LVNAME = lv => lv==="850" ? "~700" : lv;   // data key "850" holds the GRCh38 idiogram, which ISCN 2024 says best fits the 700-band level
 const state = {chr:"X", levels:new Set(["400","550","850"]), kgLevel:"400", mode:"R", showGenes:true, sel:null};
 
 const R_FILL = s => s==="gneg"?"var(--ink)":s==="gpos25"?"var(--r25)":s==="gpos50"?"var(--r50)":s==="gpos75"?"var(--r75)":s==="acen"?"var(--acen)":s==="gvar"?"url(#hatch)":s==="stalk"?"var(--stalk)":"var(--paper)";
@@ -317,8 +322,8 @@ function drawLevel(chr,lv,H){
   const geneW = genes?78:6, gW = 0, labW=70;
   const W = geneW + gW + CW + 12 + labW;
   const box=document.createElement("div"); box.className="level";
-  box.innerHTML=`<h3>${lv} bands</h3><div class="sub">${bands.length} bands on ${chr}</div>`;
-  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded ideogram at ${lv}-band level`},box);
+  box.innerHTML=`<h3>${LVNAME(lv)} bands${lv==="850"?' <span class="sub">GRCh38</span>':""}</h3><div class="sub">${bands.length} bands on ${chr}</div>`;
+  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded ideogram at ${LVNAME(lv)}-band level`},box);
   addHatch(svg);
   drawChromosome(svg,bands,geneW,CW,TOP,scale,FILL(),(r,b)=>{
     r.setAttribute("class","band"); r.dataset.lv=lv; r.dataset.name=b[0]; r.setAttribute("tabindex","0");
@@ -402,12 +407,12 @@ function showInfo(lv,name){
   const chr=state.chr, b=DATA[chr][lv].find(x=>x[0]===name); if(!b) return;
   const s=b[3], e=b[4];
   state.sel={lv,name,s,e}; highlight(state.sel);
-  const others=["400","550","850"].filter(l=>l!==lv).map(l=>`<dt>${l} level</dt><dd>${overlapping(l,s,e).map(x=>chr+x[0]).join(", ")}</dd>`).join("");
+  const others=["400","550","850"].filter(l=>l!==lv).map(l=>`<dt>${LVNAME(l)} level</dt><dd>${overlapping(l,s,e).map(x=>chr+x[0]).join(", ")}</dd>`).join("");
   const gl=(GENES[chr]||[]).filter(g=>g.end>=s && g.bp<=e).map(g=>`<b>${g.n}</b> <span style="color:var(--muted)">${g.band} · ${g.note}</span>`).join("<br>");
   const warn = b[5]==="gvar" ? '<p class="warn">Heterochromatic and polymorphic in size. Shown as a hatch because its appearance is not a simple inversion between G- and R-banding.</p>'
              : b[5]==="stalk" ? '<p class="warn">Nucleolar organizer stalk. Length and staining vary between homologues and individuals.</p>' : "";
   document.getElementById("info").innerHTML=`
-    <div class="eyebrow">${lv}-band level</div>
+    <div class="eyebrow">${LVNAME(lv)}-band level${lv==="850"?" · GRCh38":""}</div>
     <h3>${chr}${b[0]}</h3>
     <dl class="kv" style="margin-top:10px">
       ${state.mode==="R"
