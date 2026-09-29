@@ -29,6 +29,24 @@ A synthetic brightfield image of R-banded (RHG) chromosomes, built from the same
 
 This repo is public, so GitHub Pages can serve the page. Go to Settings → Pages → Build and deployment, choose **Deploy from a branch**, pick `main` and `/ (root)`, and save. The page is then published at `https://clairevaltin.github.io/Ideograms/`.
 
+## How this repo is organised
+
+| Path | What it is |
+|---|---|
+| `index.html`, `simulator.html` | The website pages. **Generated — do not edit by hand.** |
+| `src/*.template.html` | The page sources: layout, styles and code, with placeholders where the data goes. Edit these. |
+| `data/bands.json`, `data/landmark-genes.json` | The band and gene data. Edit these to change what the pages show. |
+| `build.py` | Puts templates and data together into the pages. |
+| `tools/make_data.py` | Regenerates the data files from the original NCBI/Ensembl sources, for audits or refreshes. |
+
+After changing a template or a data file, rebuild the pages and commit them:
+
+```
+python build.py
+```
+
+Each page stays a single self-contained file, so it works offline and on GitHub Pages without a server.
+
 ## Data
 
 | File | Contents | Source |
