@@ -1,16 +1,29 @@
 # Ideograms
 
-Interactive R- and G-banded ideograms of all 24 human chromosomes at the ISCN 400, 550 and 850-band levels, with landmark genes. It is a single HTML file with no build step and no dependencies.
+Interactive R- and G-banded ideograms of all 24 human chromosomes at the ISCN 400, 550 and 850-band levels, with landmark genes, plus a simulator that shows how the same chromosomes look in a real RHG metaphase. Two self-contained HTML files, with no build step and no dependencies.
 
 ## Use
 
 Open `index.html` in any browser. It works offline; without internet it falls back to system fonts.
+
+### Ideogram reference (`index.html`)
 
 - **Karyogram:** all chromosomes in A–G groups, aligned on the centromere and drawn to one shared scale. Switch between 400, 550 and 850 bands. Click a chromosome to open it.
 - **Detail view:** the selected chromosome at all three band levels side by side. Hover or tap a band to outline the same genomic interval at the other levels. The side panel shows the band's R- and G-banding appearance, its GRCh38 interval, its size and any landmark genes inside it.
 - **R/G switch:** flips every view between R-banding (RHG) and G-banding (GTG).
 - **Landmark genes:** 2 to 6 per chromosome, 74 in total. Hover a gene name for its band and a short note.
 - **Deep links:** add `#chr9`, `#chrX` and so on to the address to open a chromosome directly.
+- **Simulator link:** "See it under the microscope" opens the chromosome you are viewing in the simulator.
+
+### Microscope simulator (`simulator.html`)
+
+A synthetic brightfield image of R-banded (RHG) chromosomes, built from the same 850-band data. It is a model of what you would see, not a photograph.
+
+- **One chromosome:** a homologue pair of any chromosome, with an optional ideogram beside it. Small chromosomes are enlarged to fill the field, and the caption gives the magnification relative to chromosome 1.
+- **Karyogram:** all chromosomes in rows, aligned on the centromere at one shared scale, as 46,XX or 46,XY.
+- **Controls:** condensation (about 300 to 850 bands; sub-bands merge as it drops), focus, staining, chromatid separation, bending, Giemsa colour or camera grayscale, and the tone of heterochromatin.
+- **New spread:** draws different homologues. Heterochromatin blocks and acrocentric stalks vary in size between homologues, as they do in people.
+- **Deep links:** `simulator.html#chr1` through `#chrY`, or `simulator.html#karyogram`.
 
 ### Publish with GitHub Pages
 
@@ -31,6 +44,17 @@ This repo is public, so GitHub Pages can serve the page. Go to Settings → Page
 - **550-level gaps.** The source file leaves gaps in seven places: 7q11.2, 8q11.2, 11p11.1, 12q24.3, 18p11.3, Xp11.2 and Yq11.2. The sub-bands in each were rescaled to fill their parent 400-level band.
 
 ## Limitations
+
+### Simulator
+
+- **It is a model, not an image.** Band intensities start from the inverted NCBI grades, and each R-positive band gets a random ±12% change. Real differences between R-positive bands are not in the data, so the simulated band-to-band contrast will not match real slides exactly.
+- **Heterochromatin tone is unverified.** I found no source describing how 1q12, 9q12, 16q11.2, Yq12 or the acrocentric satellites stain in RHG. The default "Pale" is an inference from heat denaturation affecting AT-rich regions more; the page lets you change it.
+- **Acrocentric short arms are drawn at about half their ISCN ideogram length.** Ideograms draw them larger than they usually appear. This scaling is a judgement, not a measured value.
+- **Condensation is an approximation.** It is simulated by smoothing the band profile, not by modelling chromatin.
+- **Some features are missing.** The simulator does not draw twisted or crossing chromatids, splayed chromatid ends, overlapping chromosomes or nuclei.
+- **Ends are darker by design.** Terminal R-positive bands are drawn slightly darker, consistent with R-banded chromosome ends being "almost always positive" ([IntechOpen](https://www.intechopen.com/chapters/75292)).
+
+### Ideograms
 
 - **Band intensities are schematic.** The intermediate R-band tones come from inverting NCBI's G-stain grades, not from measured RHG intensities. The source gives every G-negative band the same value, so real differences between R-positive bands, such as the strongly staining T-bands, are not shown.
 - **Heterochromatin is not inverted.** Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are drawn with a hatch instead of a guessed tone, because their appearance varies between individuals and preparations.
