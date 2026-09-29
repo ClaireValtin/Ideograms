@@ -1,1 +1,69 @@
 # Ideograms
+
+Interactive R- and G-banded ideograms of all 24 human chromosomes at the ISCN 400, 550 and 850-band levels, with landmark genes. It is a single HTML file with no build step and no dependencies.
+
+## Use
+
+Open `index.html` in any browser. It works offline; without internet it falls back to system fonts.
+
+- **Karyogram:** all chromosomes in A–G groups, aligned on the centromere and drawn to one shared scale. Switch between 400, 550 and 850 bands. Click a chromosome to open it.
+- **Detail view:** the selected chromosome at all three band levels side by side. Hover or tap a band to outline the same genomic interval at the other levels. The side panel shows the band's R- and G-banding appearance, its GRCh38 interval, its size and any landmark genes inside it.
+- **R/G switch:** flips every view between R-banding (RHG) and G-banding (GTG).
+- **Landmark genes:** 2 to 6 per chromosome, 74 in total. Hover a gene name for its band and a short note.
+- **Deep links:** add `#chr9`, `#chrX` and so on to the address to open a chromosome directly.
+
+### Publish with GitHub Pages
+
+This repo is public, so GitHub Pages can serve the page. Go to Settings → Pages → Build and deployment, choose **Deploy from a branch**, pick `main` and `/ (root)`, and save. The page is then published at `https://clairevaltin.github.io/Ideograms/`.
+
+## Data
+
+| File | Contents | Source |
+|---|---|---|
+| `data/bands.json` | Every band at 400, 550 and 850 levels: `[band, iscn_start, iscn_stop, bp_start, bp_stop, ncbi_stain]` | NCBI human ideogram data, GRCh38, as packaged in [ideogram.js](https://github.com/eweitz/ideogram) 1.53.0 |
+| `data/landmark-genes.json` | Symbol, GRCh38 start/end, cytoband span, short note | Ensembl release 110 GRCh38 gene coordinates (via the ideogram.js gene cache); bands assigned from the 850-level table |
+
+`index.html` embeds the same data, so it does not load these files. They are here so the data can be checked and reused on its own.
+
+### Processing
+
+- **R pattern.** Drawn as the reciprocal of NCBI's G-stain grades, which is how ISCN treats R-banded ideograms. Band numbering is identical in both methods.
+- **550-level gaps.** The source file leaves gaps in seven places: 7q11.2, 8q11.2, 11p11.1, 12q24.3, 18p11.3, Xp11.2 and Yq11.2. The sub-bands in each were rescaled to fill their parent 400-level band.
+
+## Limitations
+
+- **Band intensities are schematic.** The intermediate R-band tones come from inverting NCBI's G-stain grades, not from measured RHG intensities. The source gives every G-negative band the same value, so real differences between R-positive bands, such as the strongly staining T-bands, are not shown.
+- **Heterochromatin is not inverted.** Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are drawn with a hatch instead of a guessed tone, because their appearance varies between individuals and preparations.
+- **550-level proportions are approximate** in the seven rescaled regions listed above.
+- **Detail views are not to scale with each other.** Each chromosome is drawn tall enough to fit its labels; only the karyogram uses a shared scale.
+- **Two ISCN levels are missing.** ISCN also defines 300- and 700-band levels, but they are not in the source data.
+- **Gene positions are for orientation.** They are placed by interpolation within their band. Gene extents follow Ensembl's annotation, which is sometimes longer than the canonical transcript (for example CFTR shows as 7q31.2–q31.31). IGH is marked at IGHM, inside the IGH locus.
+
+## Landmark genes
+
+| Chr | Genes (band) |
+|---|---|
+| 1 | MUTYH (1p34.1), NRAS (1p13.2), CKS1B (1q21.3) |
+| 2 | MYCN (2p24.3), ALK (2p23.2–p23.1), MSH2 (2p21–p16.3) |
+| 3 | VHL (3p25.3), MLH1 (3p22.2), MECOM (3q26.2) |
+| 4 | FGFR3 (4p16.3), KIT (4q12), TET2 (4q24) |
+| 5 | APC (5q22.2), NPM1 (5q35.1), NSD1 (5q35.3) |
+| 6 | DEK (6p22.3), HLA-A (6p22.1), MYB (6q23.3) |
+| 7 | EGFR (7p11.2), ELN (7q11.23), CFTR (7q31.2–q31.31) |
+| 8 | FGFR1 (8p11.23), RUNX1T1 (8q21.3), MYC (8q24.21) |
+| 9 | JAK2 (9p24.1), CDKN2A (9p21.3), ABL1 (9q34.12) |
+| 10 | RET (10q11.21), PTEN (10q23.31) |
+| 11 | WT1 (11p13), CCND1 (11q13.3), ATM (11q22.3), KMT2A (11q23.3) |
+| 12 | ETV6 (12p13.2), KRAS (12p12.1), PAH (12q23.2) |
+| 13 | FLT3 (13q12.2), BRCA2 (13q13.1), RB1 (13q14.2) |
+| 14 | SERPINA1 (14q32.13), IGH (14q32.33) |
+| 15 | SNRPN (15q11.2), FBN1 (15q21.1), PML (15q24.1) |
+| 16 | TSC2 (16p13.3), MYH11 (16p13.11), CBFB (16q22.1) |
+| 17 | TP53 (17p13.1), NF1 (17q11.2), RARA (17q21.2), BRCA1 (17q21.31) |
+| 18 | SMAD4 (18q21.2), BCL2 (18q21.33) |
+| 19 | STK11 (19p13.3), LDLR (19p13.2), CEBPA (19q13.11) |
+| 20 | JAG1 (20p12.2), ASXL1 (20q11.21), GNAS (20q13.32) |
+| 21 | APP (21q21.3), RUNX1 (21q22.12), ERG (21q22.2) |
+| 22 | TBX1 (22q11.21), BCR (22q11.23), NF2 (22q12.2) |
+| X | SHOX (Xp22.33), DMD (Xp21.2–p21.1), AR (Xq12), XIST (Xq13.2), FMR1 (Xq27.3), MECP2 (Xq28) |
+| Y | SRY (Yp11.2), USP9Y (Yq11.221), DAZ1 (Yq11.223) |

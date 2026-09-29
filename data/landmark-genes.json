@@ -1,0 +1,581 @@
+{
+ "_about": {
+  "source": "Ensembl release 110 GRCh38 gene coordinates (via ideogram.js gene cache); band assigned from the 850-level table",
+  "fields": {
+   "n": "symbol shown",
+   "bp": "gene start",
+   "end": "gene end",
+   "band": "cytoband span",
+   "note": "short clinical note"
+  },
+  "note": "IGH is marked at IGHM, inside the IGH locus."
+ },
+ "chromosomes": {
+  "1": [
+   {
+    "n": "MUTYH",
+    "bp": 45329163,
+    "end": 45340893,
+    "band": "1p34.1",
+    "note": "MUTYH-associated polyposis"
+   },
+   {
+    "n": "NRAS",
+    "bp": 114704469,
+    "end": 114716771,
+    "band": "1p13.2",
+    "note": "RAS oncogene"
+   },
+   {
+    "n": "CKS1B",
+    "bp": 154974653,
+    "end": 154979251,
+    "band": "1q21.3",
+    "note": "1q21 gain in myeloma"
+   }
+  ],
+  "2": [
+   {
+    "n": "MYCN",
+    "bp": 15940550,
+    "end": 15947007,
+    "band": "2p24.3",
+    "note": "Amplified in neuroblastoma"
+   },
+   {
+    "n": "ALK",
+    "bp": 29192774,
+    "end": 29921586,
+    "band": "2p23.2–p23.1",
+    "note": "ALK fusions (ALCL, lung)"
+   },
+   {
+    "n": "MSH2",
+    "bp": 47403067,
+    "end": 47663146,
+    "band": "2p21–p16.3",
+    "note": "Lynch syndrome"
+   }
+  ],
+  "3": [
+   {
+    "n": "VHL",
+    "bp": 10141778,
+    "end": 10153667,
+    "band": "3p25.3",
+    "note": "Von Hippel–Lindau"
+   },
+   {
+    "n": "MLH1",
+    "bp": 36993226,
+    "end": 37050896,
+    "band": "3p22.2",
+    "note": "Lynch syndrome"
+   },
+   {
+    "n": "MECOM",
+    "bp": 169083499,
+    "end": 169663775,
+    "band": "3q26.2",
+    "note": "inv(3)/t(3;3) AML"
+   }
+  ],
+  "4": [
+   {
+    "n": "FGFR3",
+    "bp": 1793293,
+    "end": 1808872,
+    "band": "4p16.3",
+    "note": "Achondroplasia; t(4;14) myeloma"
+   },
+   {
+    "n": "KIT",
+    "bp": 54657267,
+    "end": 54740783,
+    "band": "4q12",
+    "note": "GIST, mastocytosis"
+   },
+   {
+    "n": "TET2",
+    "bp": 105145875,
+    "end": 105279816,
+    "band": "4q24",
+    "note": "Myeloid neoplasms"
+   }
+  ],
+  "5": [
+   {
+    "n": "APC",
+    "bp": 112707518,
+    "end": 112846239,
+    "band": "5q22.2",
+    "note": "Familial adenomatous polyposis"
+   },
+   {
+    "n": "NPM1",
+    "bp": 171387116,
+    "end": 171411810,
+    "band": "5q35.1",
+    "note": "Mutated in AML"
+   },
+   {
+    "n": "NSD1",
+    "bp": 177131830,
+    "end": 177300213,
+    "band": "5q35.3",
+    "note": "Sotos syndrome"
+   }
+  ],
+  "6": [
+   {
+    "n": "DEK",
+    "bp": 18223860,
+    "end": 18264548,
+    "band": "6p22.3",
+    "note": "t(6;9) DEK::NUP214 AML"
+   },
+   {
+    "n": "HLA-A",
+    "bp": 29941260,
+    "end": 29949572,
+    "band": "6p22.1",
+    "note": "MHC class I region"
+   },
+   {
+    "n": "MYB",
+    "bp": 135181308,
+    "end": 135219173,
+    "band": "6q23.3",
+    "note": "MYB oncogene"
+   }
+  ],
+  "7": [
+   {
+    "n": "EGFR",
+    "bp": 55019017,
+    "end": 55211628,
+    "band": "7p11.2",
+    "note": "Lung cancer, glioma"
+   },
+   {
+    "n": "ELN",
+    "bp": 74027789,
+    "end": 74069907,
+    "band": "7q11.23",
+    "note": "Williams–Beuren region"
+   },
+   {
+    "n": "CFTR",
+    "bp": 117287120,
+    "end": 117715971,
+    "band": "7q31.2–q31.31",
+    "note": "Cystic fibrosis"
+   }
+  ],
+  "8": [
+   {
+    "n": "FGFR1",
+    "bp": 38400215,
+    "end": 38468834,
+    "band": "8p11.23",
+    "note": "8p11 myeloid/lymphoid neoplasms"
+   },
+   {
+    "n": "RUNX1T1",
+    "bp": 91954972,
+    "end": 92103286,
+    "band": "8q21.3",
+    "note": "t(8;21) RUNX1::RUNX1T1 AML"
+   },
+   {
+    "n": "MYC",
+    "bp": 127735434,
+    "end": 127742951,
+    "band": "8q24.21",
+    "note": "t(8;14) Burkitt lymphoma"
+   }
+  ],
+  "9": [
+   {
+    "n": "JAK2",
+    "bp": 4984390,
+    "end": 5129948,
+    "band": "9p24.1",
+    "note": "V617F in MPN"
+   },
+   {
+    "n": "CDKN2A",
+    "bp": 21967752,
+    "end": 21995301,
+    "band": "9p21.3",
+    "note": "9p21 deletion"
+   },
+   {
+    "n": "ABL1",
+    "bp": 130713043,
+    "end": 130887675,
+    "band": "9q34.12",
+    "note": "t(9;22) BCR::ABL1"
+   }
+  ],
+  "10": [
+   {
+    "n": "RET",
+    "bp": 43077064,
+    "end": 43130351,
+    "band": "10q11.21",
+    "note": "MEN2"
+   },
+   {
+    "n": "PTEN",
+    "bp": 87862638,
+    "end": 87971930,
+    "band": "10q23.31",
+    "note": "PTEN hamartoma tumour syndrome"
+   }
+  ],
+  "11": [
+   {
+    "n": "WT1",
+    "bp": 32387775,
+    "end": 32435564,
+    "band": "11p13",
+    "note": "Wilms tumour, WAGR"
+   },
+   {
+    "n": "CCND1",
+    "bp": 69641156,
+    "end": 69654474,
+    "band": "11q13.3",
+    "note": "t(11;14) mantle cell lymphoma"
+   },
+   {
+    "n": "ATM",
+    "bp": 108223044,
+    "end": 108369102,
+    "band": "11q22.3",
+    "note": "Ataxia-telangiectasia; del(11q) CLL"
+   },
+   {
+    "n": "KMT2A",
+    "bp": 118436456,
+    "end": 118526832,
+    "band": "11q23.3",
+    "note": "11q23 KMT2A rearrangements"
+   }
+  ],
+  "12": [
+   {
+    "n": "ETV6",
+    "bp": 11649674,
+    "end": 11895377,
+    "band": "12p13.2",
+    "note": "t(12;21) ETV6::RUNX1 ALL"
+   },
+   {
+    "n": "KRAS",
+    "bp": 25205246,
+    "end": 25250936,
+    "band": "12p12.1",
+    "note": "RAS oncogene"
+   },
+   {
+    "n": "PAH",
+    "bp": 102836889,
+    "end": 102958410,
+    "band": "12q23.2",
+    "note": "Phenylketonuria"
+   }
+  ],
+  "13": [
+   {
+    "n": "FLT3",
+    "bp": 28003274,
+    "end": 28100592,
+    "band": "13q12.2",
+    "note": "FLT3-ITD in AML"
+   },
+   {
+    "n": "BRCA2",
+    "bp": 32315086,
+    "end": 32400268,
+    "band": "13q13.1",
+    "note": "Hereditary breast/ovarian cancer"
+   },
+   {
+    "n": "RB1",
+    "bp": 48303744,
+    "end": 48599436,
+    "band": "13q14.2",
+    "note": "Retinoblastoma; del(13q14)"
+   }
+  ],
+  "14": [
+   {
+    "n": "SERPINA1",
+    "bp": 94376747,
+    "end": 94390693,
+    "band": "14q32.13",
+    "note": "Alpha-1 antitrypsin deficiency"
+   },
+   {
+    "n": "IGH",
+    "bp": 105851705,
+    "end": 105856218,
+    "band": "14q32.33",
+    "note": "IGH locus; t(8;14), t(11;14), t(14;18)"
+   }
+  ],
+  "15": [
+   {
+    "n": "SNRPN",
+    "bp": 24823637,
+    "end": 24978723,
+    "band": "15q11.2",
+    "note": "Prader–Willi / Angelman region"
+   },
+   {
+    "n": "FBN1",
+    "bp": 48408313,
+    "end": 48645721,
+    "band": "15q21.1",
+    "note": "Marfan syndrome"
+   },
+   {
+    "n": "PML",
+    "bp": 73994673,
+    "end": 74047827,
+    "band": "15q24.1",
+    "note": "t(15;17) PML::RARA APL"
+   }
+  ],
+  "16": [
+   {
+    "n": "TSC2",
+    "bp": 2047967,
+    "end": 2089491,
+    "band": "16p13.3",
+    "note": "Tuberous sclerosis"
+   },
+   {
+    "n": "MYH11",
+    "bp": 15703135,
+    "end": 15857028,
+    "band": "16p13.11",
+    "note": "inv(16) CBFB::MYH11"
+   },
+   {
+    "n": "CBFB",
+    "bp": 67028984,
+    "end": 67101058,
+    "band": "16q22.1",
+    "note": "inv(16)/t(16;16) AML"
+   }
+  ],
+  "17": [
+   {
+    "n": "TP53",
+    "bp": 7661779,
+    "end": 7687538,
+    "band": "17p13.1",
+    "note": "del(17p); Li–Fraumeni"
+   },
+   {
+    "n": "NF1",
+    "bp": 31094927,
+    "end": 31382116,
+    "band": "17q11.2",
+    "note": "Neurofibromatosis type 1"
+   },
+   {
+    "n": "RARA",
+    "bp": 40309180,
+    "end": 40357643,
+    "band": "17q21.2",
+    "note": "t(15;17) PML::RARA APL"
+   },
+   {
+    "n": "BRCA1",
+    "bp": 43044295,
+    "end": 43170245,
+    "band": "17q21.31",
+    "note": "Hereditary breast/ovarian cancer"
+   }
+  ],
+  "18": [
+   {
+    "n": "SMAD4",
+    "bp": 51028528,
+    "end": 51085045,
+    "band": "18q21.2",
+    "note": "Juvenile polyposis"
+   },
+   {
+    "n": "BCL2",
+    "bp": 63123346,
+    "end": 63320128,
+    "band": "18q21.33",
+    "note": "t(14;18) follicular lymphoma"
+   }
+  ],
+  "19": [
+   {
+    "n": "STK11",
+    "bp": 1177558,
+    "end": 1228431,
+    "band": "19p13.3",
+    "note": "Peutz–Jeghers syndrome"
+   },
+   {
+    "n": "LDLR",
+    "bp": 11089418,
+    "end": 11133820,
+    "band": "19p13.2",
+    "note": "Familial hypercholesterolaemia"
+   },
+   {
+    "n": "CEBPA",
+    "bp": 33299934,
+    "end": 33302534,
+    "band": "19q13.11",
+    "note": "Mutated in AML"
+   }
+  ],
+  "20": [
+   {
+    "n": "JAG1",
+    "bp": 10637684,
+    "end": 10673999,
+    "band": "20p12.2",
+    "note": "Alagille syndrome"
+   },
+   {
+    "n": "ASXL1",
+    "bp": 32358330,
+    "end": 32439319,
+    "band": "20q11.21",
+    "note": "Myeloid neoplasms"
+   },
+   {
+    "n": "GNAS",
+    "bp": 58839718,
+    "end": 58911192,
+    "band": "20q13.32",
+    "note": "McCune–Albright; pseudohypoparathyroidism"
+   }
+  ],
+  "21": [
+   {
+    "n": "APP",
+    "bp": 25880535,
+    "end": 26171128,
+    "band": "21q21.3",
+    "note": "Early-onset Alzheimer disease"
+   },
+   {
+    "n": "RUNX1",
+    "bp": 34787801,
+    "end": 36004667,
+    "band": "21q22.12",
+    "note": "t(8;21), t(12;21); familial platelet disorder"
+   },
+   {
+    "n": "ERG",
+    "bp": 38380027,
+    "end": 38661780,
+    "band": "21q22.2",
+    "note": "ERG fusions"
+   }
+  ],
+  "22": [
+   {
+    "n": "TBX1",
+    "bp": 19756703,
+    "end": 19783593,
+    "band": "22q11.21",
+    "note": "22q11.2 deletion region"
+   },
+   {
+    "n": "BCR",
+    "bp": 23179704,
+    "end": 23318037,
+    "band": "22q11.23",
+    "note": "t(9;22) BCR::ABL1"
+   },
+   {
+    "n": "NF2",
+    "bp": 29603556,
+    "end": 29698598,
+    "band": "22q12.2",
+    "note": "NF2-related schwannomatosis"
+   }
+  ],
+  "X": [
+   {
+    "n": "SHOX",
+    "bp": 624344,
+    "end": 659411,
+    "band": "Xp22.33",
+    "note": "PAR1; short stature"
+   },
+   {
+    "n": "DMD",
+    "bp": 31097677,
+    "end": 33339609,
+    "band": "Xp21.2–p21.1",
+    "note": "Duchenne / Becker"
+   },
+   {
+    "n": "AR",
+    "bp": 67544021,
+    "end": 67730619,
+    "band": "Xq12",
+    "note": "Androgen insensitivity"
+   },
+   {
+    "n": "XIST",
+    "bp": 73820649,
+    "end": 73852723,
+    "band": "Xq13.2",
+    "note": "X-inactivation centre"
+   },
+   {
+    "n": "FMR1",
+    "bp": 147911919,
+    "end": 147951125,
+    "band": "Xq27.3",
+    "note": "Fragile X (FRAXA)"
+   },
+   {
+    "n": "MECP2",
+    "bp": 154021573,
+    "end": 154137103,
+    "band": "Xq28",
+    "note": "Rett syndrome; Xq28 duplication"
+   }
+  ],
+  "Y": [
+   {
+    "n": "SRY",
+    "bp": 2786855,
+    "end": 2787682,
+    "band": "Yp11.2",
+    "note": "Testis determination"
+   },
+   {
+    "n": "USP9Y",
+    "bp": 12537650,
+    "end": 12860839,
+    "band": "Yq11.221",
+    "note": "AZFa region"
+   },
+   {
+    "n": "DAZ1",
+    "bp": 23129355,
+    "end": 23199010,
+    "band": "Yq11.223",
+    "note": "AZFc region"
+   }
+  ]
+ }
+}
