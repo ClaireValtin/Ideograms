@@ -167,12 +167,12 @@ input[type=range]{width:100%;margin:2px 0}
 
       <div class="ctl">
         <div class="ctl-top"><label for="res">Condensation</label><output id="resOut">~550 bands</output></div>
-        <input type="range" id="res" min="300" max="850" step="25" value="550">
+        <input type="range" id="res" min="300" max="850" step="25" value="350">
         <p class="help">Low = short metaphase, sub-bands merge. High = long prometaphase.</p>
       </div>
       <div class="ctl">
         <div class="ctl-top"><label for="focus">Focus</label><output id="focusOut">slightly soft</output></div>
-        <input type="range" id="focus" min="0" max="3" step="0.1" value="0.9">
+        <input type="range" id="focus" min="0" max="3" step="0.1" value="2.5">
       </div>
       <div class="ctl">
         <div class="ctl-top"><label for="stain">Staining</label><output id="stainOut">normal</output></div>
@@ -180,7 +180,7 @@ input[type=range]{width:100%;margin:2px 0}
       </div>
       <div class="ctl">
         <div class="ctl-top"><label for="sep">Chromatid separation</label><output id="sepOut">visible</output></div>
-        <input type="range" id="sep" min="0" max="1" step="0.05" value="0.55">
+        <input type="range" id="sep" min="0" max="1" step="0.05" value="0">
       </div>
       <div class="ctl">
         <div class="ctl-top"><label for="bend">Bending</label><output id="bendOut">moderate</output></div>
@@ -190,8 +190,8 @@ input[type=range]{width:100%;margin:2px 0}
       <div class="ctl">
         <span class="lab">Image</span>
         <div class="seg" role="group" aria-label="Image type">
-          <button data-color="giemsa" aria-pressed="true">Giemsa</button>
-          <button data-color="gray" aria-pressed="false">Grayscale</button>
+          <button data-color="giemsa" aria-pressed="false">Giemsa</button>
+          <button data-color="gray" aria-pressed="true">Grayscale</button>
         </div>
       </div>
       <div class="ctl">
@@ -317,7 +317,7 @@ function splatChromosome(buf, r, spec){
 
 // ---------- rendering ----------
 const cv=document.getElementById("cv"), ctx=cv.getContext("2d");
-const S={view:"single",chr:"1",sex:"XX",seed:1,res:550,focus:0.9,stain:1,sep:0.55,bend:0.45,color:"giemsa",qh:0.12,pair:true,ideo:true};
+const S={view:"single",chr:"1",sex:"XX",seed:1,res:350,focus:2.5,stain:1,sep:0,bend:0.45,color:"gray",qh:0.12,pair:true,ideo:true};
 
 function finish(buf,r,rad,dpr){
   const {W,H,occ,stn}=buf, A=new Float32Array(W*H), tex=makeNoise2D(r,96);
