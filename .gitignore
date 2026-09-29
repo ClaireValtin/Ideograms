@@ -1,0 +1,3 @@
+# Python bytecode cache, created automatically when build.py runs
+__pycache__/
+*.pyc
