@@ -1,0 +1,142 @@
+{
+ "_about": {
+  "source": "Ensembl release 110 GRCh38 gene coordinates (via the ideogram.js gene cache); bands assigned from the GRCh38 table",
+  "fields": {
+   "n": "symbol shown",
+   "bp": "gene start",
+   "end": "gene end",
+   "band": "cytoband span",
+   "note": "short note"
+  },
+  "note": "Fusion partners of the recurrent rearrangements used as examples on the abnormalities page. Shown only there, to keep the idiogram page uncluttered. TRA is marked at TRAC."
+ },
+ "chromosomes": {
+  "1": [
+   {
+    "n": "RBM15",
+    "bp": 110338506,
+    "end": 110346681,
+    "band": "1p13.3",
+    "note": "t(1;22) RBM15::MRTFA AMKL"
+   },
+   {
+    "n": "PBX1",
+    "bp": 164555584,
+    "end": 164899296,
+    "band": "1q23.3",
+    "note": "t(1;19) TCF3::PBX1 B-ALL"
+   }
+  ],
+  "3": [
+   {
+    "n": "GATA2",
+    "bp": 128479427,
+    "end": 128493201,
+    "band": "3q21.3",
+    "note": "inv(3)/t(3;3) GATA2 enhancer repositioned to MECOM"
+   }
+  ],
+  "4": [
+   {
+    "n": "AFF1",
+    "bp": 86935002,
+    "end": 87141039,
+    "band": "4q21.3–q22.1",
+    "note": "t(4;11) KMT2A::AFF1 B-ALL"
+   }
+  ],
+  "6": [
+   {
+    "n": "DEK",
+    "bp": 18223860,
+    "end": 18264548,
+    "band": "6p22.3",
+    "note": "t(6;9) DEK::NUP214 AML; the karyotype band is written 6p23, the gene lies in 6p22.3"
+   }
+  ],
+  "9": [
+   {
+    "n": "MLLT3",
+    "bp": 20341669,
+    "end": 20622499,
+    "band": "9p21.3",
+    "note": "t(9;11) MLLT3::KMT2A AML"
+   },
+   {
+    "n": "NUP214",
+    "bp": 131125573,
+    "end": 131234663,
+    "band": "9q34.13",
+    "note": "t(6;9) DEK::NUP214 AML"
+   }
+  ],
+  "11": [
+   {
+    "n": "FLI1",
+    "bp": 128686535,
+    "end": 128813267,
+    "band": "11q24.3",
+    "note": "t(11;22) EWSR1::FLI1 Ewing sarcoma"
+   }
+  ],
+  "14": [
+   {
+    "n": "TRA",
+    "bp": 22547506,
+    "end": 22552156,
+    "band": "14q11.2",
+    "note": "TRA locus (TRAC constant region); inv(14) T-PLL"
+   },
+   {
+    "n": "TCL1A",
+    "bp": 95709947,
+    "end": 95714196,
+    "band": "14q32.13",
+    "note": "inv(14)/t(14;14) T-PLL"
+   }
+  ],
+  "18": [
+   {
+    "n": "SS18",
+    "bp": 26016253,
+    "end": 26091217,
+    "band": "18q11.2",
+    "note": "t(X;18) SS18::SSX synovial sarcoma"
+   }
+  ],
+  "19": [
+   {
+    "n": "TCF3",
+    "bp": 1609291,
+    "end": 1652615,
+    "band": "19p13.3",
+    "note": "t(1;19) TCF3::PBX1 B-ALL"
+   }
+  ],
+  "22": [
+   {
+    "n": "EWSR1",
+    "bp": 29268009,
+    "end": 29300525,
+    "band": "22q12.2",
+    "note": "t(11;22) EWSR1::FLI1 Ewing sarcoma"
+   },
+   {
+    "n": "MRTFA",
+    "bp": 40410281,
+    "end": 40636719,
+    "band": "22q13.1–q13.2",
+    "note": "t(1;22) RBM15::MRTFA AMKL"
+   }
+  ],
+  "X": [
+   {
+    "n": "SSX1",
+    "bp": 48255392,
+    "end": 48267444,
+    "band": "Xp11.23",
+    "note": "t(X;18) SS18::SSX synovial sarcoma"
+   }
+  ]
+ }
+}

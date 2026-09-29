@@ -14,7 +14,8 @@ What it does:
     The 550 file leaves gaps inside a few 400-level bands (7q11.2, 8q11.2, 11p11.1,
     12q24.3, 18p11.3, Xp11.2, Yq11.2); the sub-bands there are rescaled to fill
     their parent band.
-  * genes: for every gene already listed in data/landmark-genes.json, the GRCh38
+  * genes: for every gene already listed in data/landmark-genes.json and
+    data/breakpoint-genes.json, the GRCh38
     start/end is refreshed from the Ensembl gene cache and the cytoband span is
     recomputed from the 850-band table. The short clinical notes are kept.
 """
@@ -108,17 +109,19 @@ def main():
             p = line.rstrip("\n").split("\t")
             cache.setdefault((p[0], p[4]), (int(p[1]), int(p[1]) + int(p[2])))
 
-    genes_path = ROOT / "data/landmark-genes.json"
-    genes = json.loads(genes_path.read_text(encoding="utf-8"))
-    for chrom, items in genes["chromosomes"].items():
-        for g in items:
-            symbol = "IGHM" if g["n"] == "IGH" else g["n"]
-            start, end = cache[(chrom, symbol)]
-            b1, b2 = band_at(bands[chrom]["850"], start), band_at(bands[chrom]["850"], end)
-            g["bp"], g["end"] = start, end
-            g["band"] = chrom + b1 + ("" if b1 == b2 else "–" + b2)
-    genes_path.write_text(json.dumps(genes, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    print("refreshed", sum(len(v) for v in genes["chromosomes"].values()), "genes")
+    # loci shown under a locus name are looked up by a representative gene
+    locus_gene = {"IGH": "IGHM", "TRA": "TRAC"}
+    for name in ("landmark-genes.json", "breakpoint-genes.json"):
+        genes_path = ROOT / "data" / name
+        genes = json.loads(genes_path.read_text(encoding="utf-8"))
+        for chrom, items in genes["chromosomes"].items():
+            for g in items:
+                start, end = cache[(chrom, locus_gene.get(g["n"], g["n"]))]
+                b1, b2 = band_at(bands[chrom]["850"], start), band_at(bands[chrom]["850"], end)
+                g["bp"], g["end"] = start, end
+                g["band"] = chrom + b1 + ("" if b1 == b2 else "–" + b2)
+        genes_path.write_text(json.dumps(genes, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
+        print("refreshed", sum(len(v) for v in genes["chromosomes"].values()), "genes in", name)
 
 
 if __name__ == "__main__":

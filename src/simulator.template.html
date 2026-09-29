@@ -55,7 +55,8 @@ a{color:var(--accent)}
 .tabs a:hover{color:var(--fg)}
 .tabs a[aria-current="page"]{background:var(--fg);color:var(--bg)}
 .tabs .sm{display:none}
-@media (max-width:560px){.tabs .lg{display:none}.tabs .sm{display:inline}.brand .brand-name{display:none}}
+@media (max-width:760px){.tabs .lg{display:none}.tabs .sm{display:inline}}
+@media (max-width:560px){.brand .brand-name{display:none}}
 /* page frame */
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:32px 56px;display:flex;flex-direction:column;gap:20px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--turq-ink);margin-bottom:10px}
@@ -116,9 +117,9 @@ input[type=range]{width:100%;margin:2px 0}
 
 <nav class="appbar" aria-label="Site">
   <div class="appbar-in">
-    <a class="brand" href="__IDEO_HREF__"__IDEO_TGT__><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Ideograms</span></a>
+    <a class="brand" href="__IDEO_HREF__"__IDEO_TGT__><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Idiograms</span></a>
     <div class="tabs">
-      <a href="__IDEO_HREF__"__IDEO_TGT__ ><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
+      <a href="__IDEO_HREF__"__IDEO_TGT__ ><span class="lg">Idiogram reference</span><span class="sm">Idiograms</span></a>
       <a href="__SIM_HREF__"__SIM_TGT__ aria-current="page"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
       <a href="__ABN_HREF__"__ABN_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
     </div>
@@ -200,7 +201,7 @@ input[type=range]{width:100%;margin:2px 0}
 
       <div class="toggles" id="singleToggles">
         <label class="toggle"><input type="checkbox" id="pair" checked><span>Show the homologue pair</span></label>
-        <label class="toggle"><input type="checkbox" id="ideo" checked><span>Show ideogram for reference</span></label>
+        <label class="toggle"><input type="checkbox" id="ideo" checked><span>Show idiogram for reference</span></label>
       </div>
     </aside>
   </div>
@@ -211,7 +212,7 @@ input[type=range]{width:100%;margin:2px 0}
       <li><b>Banding.</b> Starts from the NCBI GRCh38 idiogram (ISCN units), which ISCN 2024 says best fits the 700-band level, inverted to the R pattern. Condensation is simulated by smoothing that profile, so at lower band levels neighbouring sub-bands merge the way they do on real slides. This is an approximation of condensation, not a physical model of it.</li>
       <li><b>Intensity.</b> Each R-positive band gets a random ±12% intensity change so they are not all identical. Real differences between R-positive bands are not in the source data, so these values are illustrative. Terminal R-positive bands are drawn slightly darker, consistent with R-banded chromosome ends being "almost always positive".</li>
       <li><b>Heterochromatin.</b> 1q12, 9q12, 16q11.2, Yq12 and the acrocentric satellites and short arms vary in size between homologues here, as they do in people; ISCN 2024 (section 2.2.2) describes them as variable in size and staining intensity with R-banding too. I could not find a source describing their RHG staining, so their tone is a setting. The default "Pale" is my inference from heat denaturation affecting AT-rich regions more; treat it as unverified.</li>
-      <li><b>Acrocentrics.</b> Stalks (p12 of 13, 14, 15, 21 and 22) are drawn thinner and paler, and their length varies between homologues, which is normal. The short arms are drawn at about half their ISCN ideogram length, because ideograms draw them larger than they usually appear on slides. That scaling is my judgement, not a measured value.</li>
+      <li><b>Acrocentrics.</b> Stalks (p12 of 13, 14, 15, 21 and 22) are drawn thinner and paler, and their length varies between homologues, which is normal. The short arms are drawn at about half their ISCN idiogram length, because idiograms draw them larger than they usually appear on slides. That scaling is my judgement, not a measured value.</li>
       <li><b>Geometry.</b> Two sister chromatids joined at a primary constriction, a curved axis, small width irregularities and rounded ends. Twisted or crossing chromatids, splayed chromatid ends, overlapping chromosomes and nuclei in the field are not simulated. Relative lengths follow ISCN units, so chromosome sizes are proportional to each other.</li>
       <li><b>Magnification.</b> In the one-chromosome view, small chromosomes are enlarged to fill the field; the caption states the magnification relative to chromosome 1. The karyogram keeps every chromosome at the same scale, aligned on the centromere.</li>
       <li><b>Optics.</b> Giemsa colour uses Beer–Lambert absorbance with a purple-leaning spectrum. Grayscale mimics a karyotyping camera. Blur, grain, vignetting and debris are cosmetic.</li>
@@ -259,7 +260,7 @@ function buildProfile(chr, r, het, sigmaUnits){
     let len=b[2]-b[1];
     if(b[5]==="gvar") len*=0.72+r()*0.62;      // heteromorphism of heterochromatin blocks
     if(b[5]==="stalk") len*=0.7+r()*0.7;       // stalk length varies too
-    if(b[0].startsWith("p") && (b[5]==="gvar"||b[5]==="stalk")) len*=0.55;   // acrocentric short arms: ISCN ideograms draw them larger than they usually appear
+    if(b[0].startsWith("p") && (b[5]==="gvar"||b[5]==="stalk")) len*=0.55;   // acrocentric short arms: ISCN idiograms draw them larger than they usually appear
     bands.push({name:b[0],s:pos,e:pos+len,st:b[5]}); pos+=len;
   }
   const total=Math.max(1,Math.round(pos)), prof=new Float32Array(total), stalk=new Float32Array(total);
@@ -354,7 +355,7 @@ function render(){
         place:(ax)=>({ox:slots[h]*W-ax.cx, oy:(H-ax.h)/2+(r()-0.5)*20*dpr})});
     }
     finish(buf,r,rad,dpr);
-    if(S.ideo) drawIdeogram(chr,W,H,dpr,L);
+    if(S.ideo) drawIdiogram(chr,W,H,dpr,L);
     cap=`${nHom===2?"Homologue pair":"Single chromosome"} ${chr} · RHG · ~${S.res} bands${z>1.05?` · ×${z.toFixed(1)} vs chr 1`:""}`;
   } else {
     // karyogram: shared scale, centromeres aligned per row
@@ -393,7 +394,7 @@ function render(){
   document.getElementById("capRight").textContent=`seed ${S.seed} · ${Math.round(performance.now()-t0)} ms`;
 }
 
-function drawIdeogram(chr,W,H,dpr,L){
+function drawIdiogram(chr,W,H,dpr,L){
   const lv = S.res>=625?"850":S.res>=475?"550":"400";
   const bands=DATA[chr][lv], total=bands.at(-1)[2], len=L*(total/DATA[chr]["850"].at(-1)[2]);
   const w=12*dpr, x=W*0.83, y0=(H-len)/2, sc=len/total;

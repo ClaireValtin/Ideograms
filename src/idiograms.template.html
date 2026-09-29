@@ -1,4 +1,4 @@
-<title>Human R-Band Ideograms</title>
+<title>Human R-Band Idiograms</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -55,7 +55,8 @@ a{color:var(--accent)}
 .tabs a:hover{color:var(--fg)}
 .tabs a[aria-current="page"]{background:var(--fg);color:var(--bg)}
 .tabs .sm{display:none}
-@media (max-width:560px){.tabs .lg{display:none}.tabs .sm{display:inline}.brand .brand-name{display:none}}
+@media (max-width:760px){.tabs .lg{display:none}.tabs .sm{display:inline}}
+@media (max-width:560px){.brand .brand-name{display:none}}
 /* page frame */
 .wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:32px 56px;display:flex;flex-direction:column;gap:20px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--turq-ink);margin-bottom:10px}
@@ -154,9 +155,9 @@ svg text{font-family:var(--f-mono)}
 
 <nav class="appbar" aria-label="Site">
   <div class="appbar-in">
-    <a class="brand" href="__IDEO_HREF__"__IDEO_TGT__><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Ideograms</span></a>
+    <a class="brand" href="__IDEO_HREF__"__IDEO_TGT__><span class="brand-mark" aria-hidden="true"></span><span class="brand-name">Idiograms</span></a>
     <div class="tabs">
-      <a href="__IDEO_HREF__"__IDEO_TGT__ aria-current="page"><span class="lg">Ideogram reference</span><span class="sm">Ideograms</span></a>
+      <a href="__IDEO_HREF__"__IDEO_TGT__ aria-current="page"><span class="lg">Idiogram reference</span><span class="sm">Idiograms</span></a>
       <a href="__SIM_HREF__"__SIM_TGT__ ><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span class="lg">Microscope simulator</span><span class="sm">Simulator</span></a>
       <a href="__ABN_HREF__"__ABN_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/></svg><span class="lg">Abnormalities</span><span class="sm">Abnormal</span></a>
     </div>
@@ -164,7 +165,7 @@ svg text{font-family:var(--f-mono)}
 </nav>
 <div class="wrap">
   <header>
-    <div class="eyebrow" id="eyebrow">ISCN ideograms · RHG pattern · GRCh38</div>
+    <div class="eyebrow" id="eyebrow">ISCN idiograms · RHG pattern · GRCh38</div>
     <h1>Human chromosomes in <span id="h1mode">R&#8209;banding</span> at 400, 550 and ~700 bands</h1>
     <p>R-banding by heat denaturation reverses the G-band pattern: G-pale bands stain dark and G-dark bands stain pale. Band names are the same in both methods. Use the switch to flip every view between R- and G-banding. Pick a chromosome in the karyogram, then hover or tap a band to see the same region at the other resolutions.</p>
     <div class="hero-actions"><a class="btn-scope" href="__SIM_HREF__#karyogram"__SIM_TGT__><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg><span>Open the microscope simulator</span></a><span class="hint">See how these chromosomes look on a real RHG slide.</span></div>
@@ -215,7 +216,7 @@ svg text{font-family:var(--f-mono)}
   <section class="card notes">
     <h2>How this was drawn, and its limits</h2>
     <ul>
-      <li>Band names, ISCN lengths and G-stain grades come from NCBI's human ideogram data (GRCh38), as packaged in <a href="https://github.com/eweitz/ideogram" target="_blank" rel="noopener">ideogram.js</a>. The R pattern is the reciprocal of that G pattern, which is how ISCN treats R-banded ideograms.</li>
+      <li>Band names, ISCN lengths and G-stain grades come from NCBI's human ideogram data (GRCh38), as packaged in <a href="https://github.com/eweitz/ideogram" target="_blank" rel="noopener">ideogram.js</a>. The R pattern is the reciprocal of that G pattern, which is how ISCN treats R-banded idiograms.</li>
       <li>Grey steps for intermediate bands are an inversion of NCBI's G-stain grades, not measured RHG intensities. Every G-negative band has the same value in the source, so differences in intensity between R-positive bands (including the strongly staining T-bands) are not shown.</li>
       <li>Variable heterochromatin (1q12, 9q12, 16q11.2, Yq12, acrocentric p11.2 and p13) and stalks are not inverted. ISCN 2024 (section 2.2.2) describes these regions as variable in size and staining intensity with Q-, G-, R-, C- and T-banding, so they are drawn with a separate hatch rather than a guessed tone.</li>
       <li>At the 550 level the source file leaves gaps in seven places: 7q11.2, 8q11.2, 11p11.1, 12q24.3, 18p11.3, Xp11.2 and Yq11.2. The sub-bands in each were stretched to fill their parent 400-level band, so their relative sizes there are approximate.</li>
@@ -323,7 +324,7 @@ function drawLevel(chr,lv,H){
   const W = geneW + gW + CW + 12 + labW;
   const box=document.createElement("div"); box.className="level";
   box.innerHTML=`<h3>${LVNAME(lv)} bands${lv==="850"?' <span class="sub">GRCh38</span>':""}</h3><div class="sub">${bands.length} bands on ${chr}</div>`;
-  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded ideogram at ${LVNAME(lv)}-band level`},box);
+  const svg=el("svg",{width:W,height:H+TOP*2,viewBox:`0 0 ${W} ${H+TOP*2}`,role:"img","aria-label":`Chromosome ${chr} ${state.mode}-banded idiogram at ${LVNAME(lv)}-band level`},box);
   addHatch(svg);
   drawChromosome(svg,bands,geneW,CW,TOP,scale,FILL(),(r,b)=>{
     r.setAttribute("class","band"); r.dataset.lv=lv; r.dataset.name=b[0]; r.setAttribute("tabindex","0");
@@ -446,7 +447,7 @@ function setMode(m){
   document.querySelectorAll(".seg button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.mode===m)));
   document.getElementById("h1mode").innerHTML = m==="R"?"R&#8209;banding":"G&#8209;banding";
   document.getElementById("kgTitle").textContent = `Karyogram, ${m}-banded`;
-  document.getElementById("eyebrow").textContent = `ISCN ideograms · ${m==="R"?"RHG":"GTG"} pattern · GRCh38`;
+  document.getElementById("eyebrow").textContent = `ISCN idiograms · ${m==="R"?"RHG":"GTG"} pattern · GRCh38`;
   try{ localStorage.setItem("banding-mode",m); }catch(e){}
   renderLegend(); renderKaryogram(); render();
   if(state.sel) showInfo(state.sel.lv,state.sel.name);
